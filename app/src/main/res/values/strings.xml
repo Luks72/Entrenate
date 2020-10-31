@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Entrenate</string>
+
+    <!-- Main Activity -->
+    <string name="btn_clasifiacion">Clasificación</string>
+    <string name="btn_ejercicios">Ejercicios</string>
+    <string name="btn_preparador">Preparador Físico</string>
+    <string name="btn_progreso">Progreso</string>
+    <string name="btn_rutina">Rutina</string>
+    <string name="btn_rutinaActual">Rutina Actual</string>
+    <string name="btn_usuario">Usuario</string>
+
+    <!-- Clasificación Activity -->
+    <string name="txt_clasificacion_nombre">Nombre</string>
+    <string name="btn_clasificacion_agregar">Agregar</string>
+
 </resources>
