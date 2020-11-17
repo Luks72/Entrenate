@@ -10,17 +10,14 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import cl.ubb.entrenate.entidades.Clasificacion;
 import cl.ubb.entrenate.utilidades.Utilidades;
-
-import static cl.ubb.entrenate.utilidades.Utilidades.CAMPO_NOMBRE_CLASIFICACION;
 
 public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
 
     public AdminSQLiteAdminHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
-
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -31,8 +28,6 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
         db.execSQL(Utilidades.CREAR_TABLA_RUTINA);
         db.execSQL(Utilidades.CREAR_TABLA_RUTINAACTUAL);
         db.execSQL(Utilidades.CREAR_TABLA_USUARIO);
-
-
     }
 
     @Override
@@ -55,7 +50,6 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
         long result = db.insert(Utilidades.TABLA_CLASIFICACION, null, value);
 
         return result != -1 ;
-
     }
 
     public Cursor ver_clasificacion(){
@@ -64,8 +58,28 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
 
         return cursor;
-
     }
+
+    public boolean agregar_ejercicios (String nombre, String descripcion, Clasificacion idClasificacion){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues value = new ContentValues();
+        value.put(Utilidades.CAMPO_NOMBRE_EJERCICIOS, nombre);
+        value.put(Utilidades.CAMPO_DESCRIPCION_EJERCICIOS, descripcion);
+        value.put(Utilidades.CAMPO_IDCLASIFICACION_EJERICIOS, idClasificacion.getId());
+
+        long result = db.insert(Utilidades.TABLA_EJERCICIOS, null, value);
+
+        return result != -1 ;
+    }
+
+    public Cursor ver_ejercicios(){
+        SQLiteDatabase db= this.getReadableDatabase();
+        String query ="SELECT * FROM "+Utilidades.TABLA_EJERCICIOS;
+        Cursor cursor = db.rawQuery(query, null);
+
+        return cursor;
+    }
+
 
 
 

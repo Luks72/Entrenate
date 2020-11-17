@@ -5,13 +5,11 @@ public class Rutina {
     private int id;
     private String nombre;
     private String descripcion;
-    private int idEjercicio;
 
-    public Rutina(int id, String nombre, String descripcion, int idEjercicio) {
+    public Rutina(int id, String nombre, String descripcion) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.idEjercicio = idEjercicio;
     }
 
     public Rutina() {
@@ -40,13 +38,4 @@ public class Rutina {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
-    public int getIdEjercicio() {
-        return idEjercicio;
-    }
-
-    public void setIdEjercicio(int idEjercicio) {
-        this.idEjercicio = idEjercicio;
-    }
-
 }

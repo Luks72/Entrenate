@@ -6,17 +6,15 @@ public class Ejercicios {
     private int id;
     private String nombre;
     private String descripción;
-    private Blob foto;
-    private Blob video;
-    private int idClasificacion;
+    /*private Blob foto;
+    private Blob video;*/
 
-    public Ejercicios(int id, String nombre, String descripción, Blob foto, Blob video, int idClasificacion) {
+    public Ejercicios(int id, String nombre, String descripción) {
         this.id = id;
         this.nombre = nombre;
         this.descripción = descripción;
-        this.foto = foto;
-        this.video = video;
-        this.idClasificacion=idClasificacion;
+        /*this.foto = foto;
+        this.video = video;*/
     }
 
     public Ejercicios() {
@@ -45,7 +43,7 @@ public class Ejercicios {
     public void setDescripción(String descripción) {
         this.descripción = descripción;
     }
-
+/*
     public Blob getFoto() {
         return foto;
     }
@@ -62,14 +60,5 @@ public class Ejercicios {
         this.video = video;
     }
 
-    public int getIdClasificacion() {
-        return idClasificacion;
-    }
-
-    public void setIdClasificacion(int idClasificacion) {
-        this.idClasificacion = idClasificacion;
-    }
-
-
-
+ */
 }

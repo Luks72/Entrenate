@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +44,15 @@ public class ClasificacionActivity extends AppCompatActivity {
 
         viewData();
 
+        listViewClasifiacion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String text= listViewClasifiacion.getItemAtPosition(position).toString();
+                Toast.makeText(ClasificacionActivity.this, ""+text, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
     }
 
     private void viewData() {
@@ -64,4 +74,8 @@ public class ClasificacionActivity extends AppCompatActivity {
         nombre.setText(" ");
         Toast.makeText(ClasificacionActivity.this, "Agregado", Toast.LENGTH_SHORT).show();
     }
+
+
+
+
 }

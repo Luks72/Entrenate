@@ -10,22 +10,14 @@ public class RutinaActual {
     private String descripcion;
     private Date fechaInicio;
     private Date fechaTermino;
-    private int idRutina;
-    private int idProgreso;
-    private int idUsuario;
-    private int idPreparadorFisico;
 
-    public RutinaActual(int id, Date horario, Date horarioMedicion, String descripcion, Date fechaInicio, Date fechaTermino, int idRutina, int idProgreso, int idUsuario, int idPreparadorFisico) {
+    public RutinaActual(int id, Date horario, Date horarioMedicion, String descripcion, Date fechaInicio, Date fechaTermino) {
         this.id = id;
         this.horario = horario;
         this.horarioMedicion = horarioMedicion;
         this.descripcion = descripcion;
         this.fechaInicio = fechaInicio;
         this.fechaTermino = fechaTermino;
-        this.idRutina = idRutina;
-        this.idProgreso = idProgreso;
-        this.idUsuario = idUsuario;
-        this.idPreparadorFisico = idPreparadorFisico;
     }
 
     public RutinaActual() {
@@ -78,37 +70,4 @@ public class RutinaActual {
     public void setFechaTermino(Date fechaTermino) {
         this.fechaTermino = fechaTermino;
     }
-
-    public int getIdRutina() {
-        return idRutina;
-    }
-
-    public void setIdRutina(int idRutina) {
-        this.idRutina = idRutina;
-    }
-
-    public int getIdProgreso() {
-        return idProgreso;
-    }
-
-    public void setIdProgreso(int idProgreso) {
-        this.idProgreso = idProgreso;
-    }
-
-    public int getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public int getIdPreparadorFisico() {
-        return idPreparadorFisico;
-    }
-
-    public void setIdPreparadorFisico(int idPreparadorFisico) {
-        this.idPreparadorFisico = idPreparadorFisico;
-    }
-
 }

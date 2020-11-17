@@ -12,9 +12,8 @@ public class Usuario {
     private String telefono;
     private String direccion;
     private Date fechaNacimiento;
-    private int idRutinaActual;
 
-    public Usuario(int id, String contraseña, int tipoSuscripcion, String nombre, int edad, String telefono, String direccion, Date fechaNacimiento, int idRutinaActual) {
+    public Usuario(int id, String contraseña, int tipoSuscripcion, String nombre, int edad, String telefono, String direccion, Date fechaNacimiento) {
         this.id = id;
         this.contraseña = contraseña;
         this.tipoSuscripcion = tipoSuscripcion;
@@ -23,7 +22,6 @@ public class Usuario {
         this.telefono = telefono;
         this.direccion = direccion;
         this.fechaNacimiento = fechaNacimiento;
-        this.idRutinaActual = idRutinaActual;
     }
 
     public Usuario() {
@@ -92,13 +90,4 @@ public class Usuario {
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
-
-    public int getIdRutinaActual() {
-        return idRutinaActual;
-    }
-
-    public void setIdRutinaActual(int idRutinaActual) {
-        this.idRutinaActual = idRutinaActual;
-    }
-
 }

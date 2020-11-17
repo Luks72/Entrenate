@@ -8,14 +8,12 @@ public class Progreso {
     private Date fechayHora;
     private int medidaAbdomen;
     private int peso;
-    private int idRutinaActual;
 
-    public Progreso(int id, Date fechayHora, int medidaAbdomen, int peso, int idRutinaActual) {
+    public Progreso(int id, Date fechayHora, int medidaAbdomen, int peso) {
         this.id = id;
         this.fechayHora = fechayHora;
         this.medidaAbdomen = medidaAbdomen;
         this.peso = peso;
-        this.idRutinaActual = idRutinaActual;
     }
 
     public Progreso() {
@@ -52,13 +50,4 @@ public class Progreso {
     public void setPeso(int peso) {
         this.peso = peso;
     }
-
-    public int getIdRutinaActual() {
-        return idRutinaActual;
-    }
-
-    public void setIdRutinaActual(int idRutinaActual) {
-        this.idRutinaActual = idRutinaActual;
-    }
-
 }

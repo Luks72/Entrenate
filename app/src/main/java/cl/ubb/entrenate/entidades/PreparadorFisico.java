@@ -6,16 +6,12 @@ public class PreparadorFisico {
     private String nombre;
     private String telefono;
     private String correo;
-    private int idRutina;
-    private int idRutinaActual;
 
-    public PreparadorFisico(int id, String nombre, String telefono, String correo, int idRutina, int idRutinaActual) {
+    public PreparadorFisico(int id, String nombre, String telefono, String correo) {
         this.id = id;
         this.nombre = nombre;
         this.telefono = telefono;
         this.correo = correo;
-        this.idRutina = idRutina;
-        this.idRutinaActual = idRutinaActual;
     }
 
     public PreparadorFisico() {
@@ -52,21 +48,4 @@ public class PreparadorFisico {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
-
-    public int getIdRutina() {
-        return idRutina;
-    }
-
-    public void setIdRutina(int idRutina) {
-        this.idRutina = idRutina;
-    }
-
-    public int getIdRutinaActual() {
-        return idRutinaActual;
-    }
-
-    public void setIdRutinaActual(int idRutinaActual) {
-        this.idRutinaActual = idRutinaActual;
-    }
-
 }

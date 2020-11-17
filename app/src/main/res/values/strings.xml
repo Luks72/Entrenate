@@ -14,4 +14,11 @@
     <string name="txt_clasificacion_nombre">Nombre</string>
     <string name="btn_clasificacion_agregar">Agregar</string>
 
+    <!-- Ejercicios Activity -->
+    <string name="txt_ejercicios_nombre">Nombre</string>
+    <string name="txt_ejercicios_descripcion">Descripción</string>
+    <string name="btn_ejercicios_agregar">Agregar</string>
+    <string name="txt_ejericicios_clasificacion">Clasificacion</string>
+    <string name="txt_ejericicios_ejercicios">Ejercicios</string>
+
 </resources>
