@@ -33,7 +33,7 @@ public class ClasificacionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clasificacion);
 
-        db = new AdminSQLiteAdminHelper(this, "bdd_clasificacion", null,1);
+        db = new AdminSQLiteAdminHelper(this, "entrenate_bdd", null,1);
         listItem = new ArrayList<>();
 
 
@@ -73,6 +73,7 @@ public class ClasificacionActivity extends AppCompatActivity {
         db.agregar_clasificacion(name);
         nombre.setText(" ");
         Toast.makeText(ClasificacionActivity.this, "Agregado", Toast.LENGTH_SHORT).show();
+        viewData();
     }
 
 

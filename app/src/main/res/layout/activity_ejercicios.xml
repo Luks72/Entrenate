@@ -58,8 +58,8 @@
 
     <ListView
         android:id="@+id/list_clasificacion_ejercicios"
-        android:layout_width="285dp"
-        android:layout_height="100dp"
+        android:layout_width="299dp"
+        android:layout_height="39dp"
         android:layout_marginStart="63dp"
         android:layout_marginLeft="63dp"
         android:layout_marginEnd="63dp"
@@ -70,30 +70,47 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spn_clasificacion_ejercicios"
-        app:layout_constraintVertical_bias="0.578" />
-
-    <TextView
-        android:id="@+id/txt_ejercicios_clasificacion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="63dp"
-        android:layout_marginLeft="63dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="268dp"
-        android:layout_marginRight="268dp"
-        android:text="@string/txt_ejericicios_clasificacion"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spn_clasificacion_ejercicios" />
+        app:layout_constraintVertical_bias="0.951"
+        tools:visibility="visible" />
 
     <Spinner
         android:id="@+id/spn_clasificacion_ejercicios"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_width="101dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="312dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_ejercicios_descripcion" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_ejercicios_descripcion"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/btn_ejercicios_imagen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_ejercicios_imagen"
+        app:layout_constraintBottom_toTopOf="@+id/spn_clasificacion_ejercicios"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_ejercicios_descripcion"
+        app:layout_constraintVertical_bias="0.974" />
+
+    <ImageView
+        android:id="@+id/img_ejercicios"
+        android:layout_width="241dp"
+        android:layout_height="218dp"
+        android:layout_marginStart="141dp"
+        android:layout_marginLeft="141dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="142dp"
+        android:layout_marginRight="142dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_ejercicios_imagen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_ejercicios_descripcion"
+        app:layout_constraintVertical_bias="0.096"
+        tools:srcCompat="@tools:sample/avatars" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

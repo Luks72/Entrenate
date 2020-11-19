@@ -20,5 +20,7 @@
     <string name="btn_ejercicios_agregar">Agregar</string>
     <string name="txt_ejericicios_clasificacion">Clasificacion</string>
     <string name="txt_ejericicios_ejercicios">Ejercicios</string>
+    <string name="btn_ejercicios_imagen">Imagen</string>
+    <string name="img_ejercicios">Imagen</string>
 
 </resources>
