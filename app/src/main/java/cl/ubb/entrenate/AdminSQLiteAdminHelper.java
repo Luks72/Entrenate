@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.view.View;
 import android.widget.Toast;
@@ -15,8 +17,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import cl.ubb.entrenate.entidades.Clasificacion;
-import cl.ubb.entrenate.utilidades.Utilidades;
 //Métodos comentados en el fondo
 public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
 
@@ -66,14 +66,14 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
 
     }
 
-    public Boolean agregar_ejercicios (String nombre, String descripcion, int idClasificacion /*byte [] foto*/){
+    public Boolean agregar_ejercicios (String nombre, String descripcion, int idClasificacion, byte [] foto){
         SQLiteDatabase db = this.getWritableDatabase();
 
          ContentValues value = new ContentValues();
          value.put(CAMPO_NOMBRE_EJERCICIOS, nombre);
          value.put(CAMPO_DESCRIPCION_EJERCICIOS, descripcion);
          value.put(CAMPO_IDCLASIFICACION_EJERICIOS, idClasificacion);
-         //value.put(CAMPO_FOTO_EJERCICIOS, foto);
+         value.put(CAMPO_FOTO_EJERCICIOS, foto);
 
          long result = db.insert(TABLA_EJERCICIOS, null, value);
 
@@ -94,6 +94,13 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
         return cursor;
 
+    }
+
+    public Cursor getImagen() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from "+TABLA_EJERCICIOS, null);
+
+        return cursor;
     }
 
 

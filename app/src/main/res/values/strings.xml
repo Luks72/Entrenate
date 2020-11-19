@@ -22,5 +22,9 @@
     <string name="txt_ejericicios_ejercicios">Ejercicios</string>
     <string name="btn_ejercicios_imagen">Imagen</string>
     <string name="img_ejercicios">Imagen</string>
+    <string name="btn_ejercicios_verEjercicios">Ver Ejercicios</string>
+
+    <!-- VerEjercicios Activity -->
+    <string name="txt_verEjercicios_nombre">Nombre: </string>
 
 </resources>
