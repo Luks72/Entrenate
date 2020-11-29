@@ -79,7 +79,7 @@ public class EjerciciosActivity extends AppCompatActivity {
         BitmapDrawable drawable = (BitmapDrawable) imgView.getDrawable();
         Bitmap b = drawable.getBitmap();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        b.compress(Bitmap.CompressFormat.PNG, 100, bos);
+        b.compress(Bitmap.CompressFormat.PNG, 85, bos);
         byte[] img = bos.toByteArray();
 
 
@@ -89,6 +89,7 @@ public class EjerciciosActivity extends AppCompatActivity {
         db.agregar_ejercicios(name, desc, position, img);
         nombre.setText("");
         descripcion.setText("");
+        imgView.setImageResource(android.R.color.transparent);
         //Hacer un Toast según el resultado, puedo poner uno que diga que no se pudo agregar el atributo
         //Funciona como exception
         Toast.makeText(EjerciciosActivity.this, "Agregado", Toast.LENGTH_SHORT).show();

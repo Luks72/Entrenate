@@ -10,7 +10,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Entrenate">
+        android:theme="@style/Theme.Entrenate"
+        android:requestLegacyExternalStorage="true">
+
         <activity android:name=".VerEjeciciosActivity"></activity>
         <activity android:name=".ClasificacionActivity" />
         <activity android:name=".EjerciciosActivity" />
