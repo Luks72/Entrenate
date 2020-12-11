@@ -66,6 +66,14 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
 
     }
 
+    public Cursor ver_ejercicios(){
+        SQLiteDatabase db= this.getReadableDatabase();
+        String query ="SELECT * FROM "+TABLA_EJERCICIOS;
+        Cursor cursor = db.rawQuery(query, null);
+
+        return cursor;
+    }
+
     public Boolean agregar_ejercicios (String nombre, String descripcion, int idClasificacion, byte [] foto){
         SQLiteDatabase db = this.getWritableDatabase();
 
