@@ -24,8 +24,7 @@
     <string name="img_ejercicios">Imagen</string>
     <string name="btn_ejercicios_verEjercicios">Ver Ejercicios</string>
 
-    <!-- VerEjercicios Activity -->
-    <string name="txt_verEjercicios_nombre">Nombre: </string>
+    <!-- Navigation Drawer -->
     <string name="title_activity_main_menu">MainMenu</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -34,6 +33,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Elementos SideBar -->
     <string name="menu_home">Home</string>
     <string name="menu_ejercicios">Ejercicios</string>
     <string name="menu_slideshow">Slideshow</string>

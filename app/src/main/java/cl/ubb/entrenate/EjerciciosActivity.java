@@ -149,7 +149,7 @@ public class EjerciciosActivity extends AppCompatActivity {
         Intent miIntent=null;
         switch (view.getId()){
             case R.id.btn_ejercicios_verEjercicios:
-                miIntent= new Intent(EjerciciosActivity.this, VerEjeciciosActivity.class);
+                miIntent= new Intent(EjerciciosActivity.this, DetalleEjercicio.class);
                 break;
         }
         if(miIntent!=null){

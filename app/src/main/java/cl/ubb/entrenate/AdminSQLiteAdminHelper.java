@@ -89,6 +89,18 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
 
     }
 
+    public void eliminar_ejercicio(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(db!=null){
+            db.execSQL("DELETE FROM "+TABLA_EJERCICIOS+" WHERE "+id+" = "+CAMPO_ID_EJERCICIOS);
+            db.close();
+        }
+    }
+
+
+
+
+
     public Cursor prueba_innerJoin(){
         SQLiteDatabase db = this.getReadableDatabase();
 
