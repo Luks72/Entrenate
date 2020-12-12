@@ -24,7 +24,7 @@
         </activity>
         <activity android:name=".DetalleEjercicio" />
         <activity android:name=".ClasificacionActivity" />
-        <activity android:name=".EjerciciosActivity" />
+        <activity android:name=".AgregarEjerciciosActivity" />
         <activity android:name=".MainActivity">
         </activity>
     </application>

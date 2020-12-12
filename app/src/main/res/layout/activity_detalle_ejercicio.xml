@@ -1,43 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
     tools:context=".DetalleEjercicio">
 
-    <LinearLayout
+
+    <ImageView
+        android:id="@+id/img_detalleEjercicio"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="55dp"
+        android:layout_marginLeft="55dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginRight="56dp"
+        android:layout_marginBottom="286dp"
+        android:paddingTop="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_detalleEjercicio_eliminar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/txt_detalleEjercicio_descripcion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:background="#D9E0E2"
+        android:paddingTop="10dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/img_detalleEjercicio"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            tools:layout_editor_absoluteX="44dp"
-            tools:layout_editor_absoluteY="66dp"
-            tools:srcCompat="@tools:sample/avatars"
-            android:layout_gravity="center"
-            android:paddingTop="30dp"/>
+    <Button
+        android:id="@+id/btn_detalleEjercicio_eliminar"
+        android:layout_width="113dp"
+        android:layout_height="38dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="68dp"
+        android:layout_marginRight="68dp"
+        android:layout_marginBottom="40dp"
+        android:text="Eliminar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
-            android:id="@+id/txt_detalleEjercicio_descripcion"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="30dp"
-            android:textSize="18sp"
-            tools:layout_editor_absoluteX="44dp"
-            tools:layout_editor_absoluteY="371dp"
-            android:background="#D9E0E2"/>
+    <Button
+        android:id="@+id/btn_detalleEjercicio_video"
+        android:layout_width="183dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="114dp"
+        android:layout_marginLeft="114dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="114dp"
+        android:layout_marginRight="114dp"
+        android:backgroundTint="@color/red"
+        android:drawableLeft="@drawable/ic_baseline_ondemand_video_24"
+        android:text="Video"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_detalleEjercicio_descripcion" />
+
+    <Button
+        android:id="@+id/btn_detalleEjercicio_editar"
+        android:layout_width="100dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginLeft="88dp"
+        android:layout_marginBottom="36dp"
+        android:text="Editar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
-        <Button
-            android:id="@+id/btn_detalleEjercicio_eliminar"
-            android:layout_width="117dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Eliminar" />
-
-    </LinearLayout>
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,14 +7,14 @@ public class Ejercicios {
     private String nombre;
     private String descripción;
     private byte[] imagen;
-    //private Blob video;*/
+    private String video;
 
-    public Ejercicios(int id, String nombre, String descripción, byte[] imagen) {
+    public Ejercicios(int id, String nombre, String descripción, byte[] imagen, String video) {
         this.id = id;
         this.nombre = nombre;
         this.descripción = descripción;
         this.imagen = imagen;
-        //this.video = video;*/
+        this.video = video;
     }
 
     public Ejercicios() {
@@ -51,14 +51,14 @@ public class Ejercicios {
     public void setImagen(byte[] imagen) {
         this.imagen = imagen;
     }
-/*
-    public Blob getVideo() {
+
+    public String getVideo() {
         return video;
     }
 
-    public void setVideo(Blob video) {
+    public void setVideo(String  video) {
         this.video = video;
     }
 
- */
+
 }

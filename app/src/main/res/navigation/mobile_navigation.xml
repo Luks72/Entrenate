@@ -22,4 +22,7 @@
         android:name="cl.ubb.entrenate.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+
+
+
 </navigation>

@@ -14,13 +14,14 @@
     <string name="txt_clasificacion_nombre">Nombre</string>
     <string name="btn_clasificacion_agregar">Agregar</string>
 
-    <!-- Ejercicios Activity -->
-    <string name="txt_ejercicios_nombre">Nombre</string>
-    <string name="txt_ejercicios_descripcion">Descripción</string>
-    <string name="btn_ejercicios_agregar">Agregar</string>
+    <!-- agregarEjercicios Activity -->
+    <string name="txt_agregarEjercicios_nombre">Nombre ejercicio</string>
+    <string name="txt_agregarEjercicios_descripcion">Descripción ejercicio</string>
+    <string name="txt_agregarEjercicios_video">Link video Youtube</string>
+    <string name="btn_agregarEjercicios_agregar">Agregar</string>
     <string name="txt_ejericicios_clasificacion">Clasificacion</string>
     <string name="txt_ejericicios_ejercicios">Ejercicios</string>
-    <string name="btn_ejercicios_imagen">Imagen</string>
+    <string name="btn_agregarEjercicios_imagen">Seleccionar Imagen</string>
     <string name="img_ejercicios">Imagen</string>
     <string name="btn_ejercicios_verEjercicios">Ver Ejercicios</string>
 

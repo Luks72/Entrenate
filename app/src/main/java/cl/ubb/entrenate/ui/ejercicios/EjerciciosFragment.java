@@ -1,22 +1,28 @@
 package cl.ubb.entrenate.ui.ejercicios;
 
+import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,6 +32,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import cl.ubb.entrenate.AdminSQLiteAdminHelper;
+import cl.ubb.entrenate.ClasificacionActivity;
 import cl.ubb.entrenate.DetalleEjercicio;
 import cl.ubb.entrenate.MainActivity;
 import cl.ubb.entrenate.MainMenu;
@@ -41,6 +48,7 @@ public class EjerciciosFragment extends Fragment implements Serializable{
     private ImagenesAdaptador adaptador;
     SwipeRefreshLayout refreshLayout;
     private ArrayList<Ejercicios> ejercicios;
+    private TextView vacio;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,9 +62,11 @@ public class EjerciciosFragment extends Fragment implements Serializable{
         ejercicios= new ArrayList<>();
         gridView = (GridView) root.findViewById(R.id.grid);
         refreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.refresh);
+        vacio = (TextView) root.findViewById(R.id.vacio);
+        vacio.setVisibility(View.VISIBLE);
+        gridView.setEmptyView(vacio);
 
         rellenarGrid();
-        adaptador.notifyDataSetChanged();
 
 
          //**cambiar ícono del botón flotante**
@@ -73,23 +83,26 @@ public class EjerciciosFragment extends Fragment implements Serializable{
                 String descripcion = selected.getDescripción();
                 byte[] imagen = selected.getImagen();
                 int ide = selected.getId();
+                String video = selected.getVideo();
                 startActivity(new Intent(getActivity(), DetalleEjercicio.class)
                         .putExtra("nombre", nombre)
                         .putExtra("descripcion", descripcion)
                         .putExtra("imagen", imagen)
-                        .putExtra("id", ide));
+                        .putExtra("id", ide)
+                        .putExtra("video", video));
             }
         });
-
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshLayout.setRefreshing(false);
+                getFragmentManager()
+                        .beginTransaction()
+                        .detach(EjerciciosFragment.this)
+                        .attach(EjerciciosFragment.this)
+                        .commit();
             }
         });
-
-
 
         return root;
     }
@@ -98,20 +111,20 @@ public class EjerciciosFragment extends Fragment implements Serializable{
     private void rellenarGrid() {
         Cursor cursor = db.ver_ejercicios();
         if (cursor.getCount()== 0 ){
-            Toast.makeText(getActivity(), "No hay ná", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "No hay ejercicios para mostrar, puedes agregar presionando en el botón +", Toast.LENGTH_LONG).show();
         }else{
             while (cursor.moveToNext()){
                 int id = cursor.getInt(0);
                 String nombre = cursor.getString(1);
                 String desc = cursor.getString(2);
                 byte[] image = cursor.getBlob(3);
+                String video = cursor.getString(4);
 
-                ejercicios.add(new Ejercicios(id, nombre, desc, image));
+                ejercicios.add(new Ejercicios(id, nombre, desc, image, video));
 
             }
             adaptador = new ImagenesAdaptador(getActivity(), ejercicios);
             gridView.setAdapter(adaptador);
-
         }
     }
 

@@ -22,18 +22,18 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
-public class EjerciciosActivity extends AppCompatActivity {
+public class AgregarEjerciciosActivity extends AppCompatActivity {
 
     AdminSQLiteAdminHelper db;
 
     Button agregar, imagen;
-    EditText nombre, descripcion;
+    EditText nombre, descripcion, video;
 
     ArrayList<String> listClasificacion, listEjercicios;
     ArrayAdapter adapterClasificacion, adapterEjercicios;
 
     ListView listViewClasificacion, listViewEjercicios;
-    Spinner spinnerClasifiacacion;
+    Spinner spinnerClasificacion;
 
     ImageView imgView;
 
@@ -42,7 +42,7 @@ public class EjerciciosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ejercicios);
+        setContentView(R.layout.activity_agregar_ejercicios);
 
         db = new AdminSQLiteAdminHelper(this, "entrenate_bdd", null,1);
 
@@ -50,17 +50,15 @@ public class EjerciciosActivity extends AppCompatActivity {
         listClasificacion = new ArrayList<>();
         listEjercicios = new ArrayList<>();
 
-        imagen= findViewById(R.id.btn_ejercicios_imagen);
-        imgView= findViewById(R.id.img_ejercicios);
-
-        agregar= findViewById(R.id.btn_ejercicios_agregar);
-        nombre= findViewById(R.id.txt_ejercicios_nombre);
-        descripcion= findViewById(R.id.txt_ejercicios_descripcion);
-        //listViewClasificacion= findViewById(R.id.list_clasificacion_ejercicios);
-        spinnerClasifiacacion = findViewById(R.id.spn_clasificacion_ejercicios);
-
-        //listaClasificacion();
+        imagen= findViewById(R.id.btn_agregarEjercicios_imagen);
+        imgView= findViewById(R.id.img_agregarEjercicios_imagen);
+        agregar= findViewById(R.id.btn_agregarEjercicios_agregar);
+        nombre= findViewById(R.id.txt_agregarEjercicio_nombre);
+        descripcion= findViewById(R.id.txt_agregarEjercicio_descripcion);
+        video= findViewById(R.id.txt_agregarEjercicio_video);
+        spinnerClasificacion = findViewById(R.id.spn_agregarEjercicios_clasificacion);
         spinnerClasificacion();
+        setTitle("Agregar Ejercicios");
 
         imagen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,16 +81,18 @@ public class EjerciciosActivity extends AppCompatActivity {
         byte[] img = bos.toByteArray();
 
 
-        int position = spinnerClasifiacacion.getSelectedItemPosition();
+        int position = spinnerClasificacion.getSelectedItemPosition();
         String name=nombre.getText().toString();
         String desc=descripcion.getText().toString();
-        db.agregar_ejercicios(name, desc, position, img);
+        String vid=video.getText().toString();
+        db.agregar_ejercicios(name, desc, position, img, vid);
         nombre.setText("");
         descripcion.setText("");
+        video.setText("");
         imgView.setImageResource(android.R.color.transparent);
         //Hacer un Toast según el resultado, puedo poner uno que diga que no se pudo agregar el atributo
         //Funciona como exception
-        Toast.makeText(EjerciciosActivity.this, "Agregado", Toast.LENGTH_SHORT).show();
+        Toast.makeText(AgregarEjerciciosActivity.this, "Agregado", Toast.LENGTH_SHORT).show();
     }
 
     /*public void listaClasificacion() {
@@ -113,7 +113,7 @@ public class EjerciciosActivity extends AppCompatActivity {
     public void spinnerClasificacion() {
 
         Cursor cursor = db.ver_clasificacion();
-        listEjercicios.add("Ejercicios");
+        listEjercicios.add("Seleccione tipo de ejercicio");
         if (cursor.getCount() == 0) {
             Toast.makeText(this, "No hay ejercicios", Toast.LENGTH_SHORT).show();
         } else {
@@ -121,8 +121,17 @@ public class EjerciciosActivity extends AppCompatActivity {
                 listEjercicios.add(cursor.getString(1));
             }
 
-            adapterEjercicios = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listEjercicios);
-            spinnerClasifiacacion.setAdapter(adapterEjercicios);
+            adapterEjercicios = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listEjercicios){
+                @Override
+                public boolean isEnabled(int position){
+                    if (position == 0) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            };
+            spinnerClasificacion.setAdapter(adapterEjercicios);
 
         }
     }
@@ -140,22 +149,9 @@ public class EjerciciosActivity extends AppCompatActivity {
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             String picturePath = cursor.getString(columnIndex);
             cursor.close();
-            ImageView imageView = (ImageView) findViewById(R.id.img_ejercicios);
+            ImageView imageView = (ImageView) findViewById(R.id.img_agregarEjercicios_imagen);
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         }
     }
-
-    public void onVerEjerciciosClick (View view){
-        Intent miIntent=null;
-        switch (view.getId()){
-            case R.id.btn_ejercicios_verEjercicios:
-                miIntent= new Intent(EjerciciosActivity.this, DetalleEjercicio.class);
-                break;
-        }
-        if(miIntent!=null){
-            startActivity(miIntent);
-        }
-    }
-
 
 }

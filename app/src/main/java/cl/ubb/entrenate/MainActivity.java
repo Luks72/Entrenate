@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
                 miIntent= new Intent(MainActivity.this, ClasificacionActivity.class);
                 break;
             case R.id.btn_ejercicios:
-                miIntent= new Intent(MainActivity.this, EjerciciosActivity.class);
+                miIntent= new Intent(MainActivity.this, AgregarEjerciciosActivity.class);
         }
         if(miIntent!=null){
             startActivity(miIntent);

@@ -74,7 +74,7 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Boolean agregar_ejercicios (String nombre, String descripcion, int idClasificacion, byte [] foto){
+    public Boolean agregar_ejercicios (String nombre, String descripcion, int idClasificacion, byte [] foto, String video){
         SQLiteDatabase db = this.getWritableDatabase();
 
          ContentValues value = new ContentValues();
@@ -82,6 +82,7 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
          value.put(CAMPO_DESCRIPCION_EJERCICIOS, descripcion);
          value.put(CAMPO_IDCLASIFICACION_EJERICIOS, idClasificacion);
          value.put(CAMPO_FOTO_EJERCICIOS, foto);
+         value.put(CAMPO_VIDEO_EJERCICIOS, video);
 
          long result = db.insert(TABLA_EJERCICIOS, null, value);
 
@@ -97,9 +98,21 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
         }
     }
 
+    public Boolean editar_ejercicios (String nombre, String descripcion, int idClasificacion, byte [] foto, String video, int id){
+        SQLiteDatabase db = this.getWritableDatabase();
 
+        ContentValues value = new ContentValues();
+        value.put(CAMPO_NOMBRE_EJERCICIOS, nombre);
+        value.put(CAMPO_DESCRIPCION_EJERCICIOS, descripcion);
+        value.put(CAMPO_IDCLASIFICACION_EJERICIOS, idClasificacion);
+        value.put(CAMPO_FOTO_EJERCICIOS, foto);
+        value.put(CAMPO_VIDEO_EJERCICIOS, video);
 
+        long result = db.update(TABLA_EJERCICIOS, value, "id="+id, null);
 
+        return result != -1;
+
+    }
 
     public Cursor prueba_innerJoin(){
         SQLiteDatabase db = this.getReadableDatabase();
@@ -205,7 +218,7 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
                 "" + CAMPO_NOMBRE_EJERCICIOS + " TEXT, " +
                 "" + CAMPO_DESCRIPCION_EJERCICIOS + " TEXT, " +
                 "" + CAMPO_FOTO_EJERCICIOS + " BLOB, " +
-                "" + CAMPO_VIDEO_EJERCICIOS + " BLOB, " +
+                "" + CAMPO_VIDEO_EJERCICIOS + " TEXT, " +
                 "" + CAMPO_IDCLASIFICACION_EJERICIOS + " INTEGER, " +
                 "FOREIGN KEY (" + CAMPO_IDCLASIFICACION_EJERICIOS + ") " +
                 "   REFERENCES " + TABLA_CLASIFICACION + "(" + CAMPO_ID_CLASIFICACION + ")" +
