@@ -37,6 +37,6 @@
     <!-- Elementos SideBar -->
     <string name="menu_home">Home</string>
     <string name="menu_ejercicios">Ejercicios</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_rutinas">Rutinas</string>
 
 </resources>

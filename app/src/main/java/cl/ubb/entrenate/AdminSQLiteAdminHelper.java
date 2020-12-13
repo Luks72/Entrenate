@@ -133,6 +133,16 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
 
     }
 
+    public Boolean revisar_correo_usuario(String correo){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM "+TABLA_USUARIO+" WHERE "+CAMPO_CORREO_USUARIO+"=?", new String[] {correo});
+        if(cursor.getCount()>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public Boolean revisar_usuario (String correo, String contrasena){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM "+TABLA_USUARIO+" WHERE "+CAMPO_CORREO_USUARIO+"=? AND "+CAMPO_CONTRASEÑA_USUARIO+"=?", new String[]{correo, contrasena});
@@ -149,7 +159,7 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
         "SELECT " +CAMPO_NOMBRE_EJERCICIOS+ ", " +CAMPO_NOMBRE_CLASIFICACION+
         " FROM " +TABLA_EJERCICIOS+
         " INNER JOIN " +TABLA_CLASIFICACION+
-        " ON " +CAMPO_IDCLASIFICACION_EJERICIOS+ " = " +CAMPO_ID_CLASIFICACION ;
+        " ON " +CAMPO_IDCLASIFICACION_EJERICIOS+ " = " +CAMPO_ID_CLASIFICACION;
 
 
         Cursor cursor = db.rawQuery(query, null);

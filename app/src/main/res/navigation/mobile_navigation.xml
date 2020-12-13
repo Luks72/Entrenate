@@ -18,10 +18,10 @@
         tools:layout="@layout/fragment_ejercicios" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="cl.ubb.entrenate.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_rutinas"
+        android:name="cl.ubb.entrenate.ui.rutinas.RutinasFragment"
+        android:label="@string/menu_rutinas"
+        tools:layout="@layout/fragment_rutinas" />
 
 
 

@@ -65,7 +65,8 @@ public class AgregarUsuario extends AppCompatActivity {
         dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                txt_fechaNacimiento.setText(dayOfMonth+"/"+month+1+"/"+year);
+                int mes=month+1;
+                txt_fechaNacimiento.setText(dayOfMonth+"/"+mes+"/"+year);
             }
         };
 
@@ -80,13 +81,16 @@ public class AgregarUsuario extends AppCompatActivity {
                 String correo=txt_correo.getText().toString();
                 String fechaNac=txt_fechaNacimiento.getText().toString();
                 if(contrasena.equals(confContra)){
-                    db.agregar_usuarios(nombre, contrasena, telefono, direccion,fechaNac, correo);
-                    Toast.makeText(AgregarUsuario.this, "Agregado", Toast.LENGTH_SHORT).show();
+                    if(db.revisar_correo_usuario(correo)){
+                        Toast.makeText(AgregarUsuario.this, "El correo ingresado ya existe", Toast.LENGTH_SHORT).show();
+                    }else{
+                        db.agregar_usuarios(nombre,contrasena,telefono,direccion,fechaNac,correo);
+                        Toast.makeText(AgregarUsuario.this, "Agregado", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 }else{
                     Toast.makeText(AgregarUsuario.this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
 
