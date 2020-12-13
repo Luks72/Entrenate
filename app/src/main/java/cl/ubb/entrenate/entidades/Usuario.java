@@ -12,8 +12,9 @@ public class Usuario {
     private String telefono;
     private String direccion;
     private Date fechaNacimiento;
+    private String correo;
 
-    public Usuario(int id, String contraseña, int tipoSuscripcion, String nombre, int edad, String telefono, String direccion, Date fechaNacimiento) {
+    public Usuario(int id, String contraseña, int tipoSuscripcion, String nombre, int edad, String telefono, String direccion, Date fechaNacimiento, String correo) {
         this.id = id;
         this.contraseña = contraseña;
         this.tipoSuscripcion = tipoSuscripcion;
@@ -22,6 +23,7 @@ public class Usuario {
         this.telefono = telefono;
         this.direccion = direccion;
         this.fechaNacimiento = fechaNacimiento;
+        this.correo=correo;
     }
 
     public Usuario() {
@@ -89,5 +91,13 @@ public class Usuario {
 
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getCorreo (){
+        return correo;
+    }
+
+    public void setCorreo(String correo){
+        this.correo=correo;
     }
 }

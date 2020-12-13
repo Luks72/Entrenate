@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Date;
 
 //Métodos comentados en el fondo
 public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
@@ -114,6 +115,33 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
 
     }
 
+    public Boolean agregar_usuarios
+            (String nombre, String contrasena, String telefono, String direccion, String fechaNacimiento, String correo){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues value = new ContentValues();
+        value.put(CAMPO_NOMBRE_USUARIO, nombre);
+        value.put(CAMPO_CONTRASEÑA_USUARIO, contrasena);
+        value.put(CAMPO_TELEFONO_USUARIO, telefono);
+        value.put(CAMPO_DIRECCION_USUARIO, direccion);
+        value.put(CAMPO_CORREO_USUARIO, correo);
+        value.put(CAMPO_FECHANACIMIENTO_USUARIO, fechaNacimiento);
+
+        long result = db.insert(TABLA_USUARIO, null, value);
+
+        return result != -1;
+
+    }
+
+    public Boolean revisar_usuario (String correo, String contrasena){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM "+TABLA_USUARIO+" WHERE "+CAMPO_CORREO_USUARIO+"=? AND "+CAMPO_CONTRASEÑA_USUARIO+"=?", new String[]{correo, contrasena});
+        if(cursor.getCount()>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
     public Cursor prueba_innerJoin(){
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -202,6 +230,7 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
         public static final String CAMPO_DIRECCION_USUARIO = "direccion_Usuario";
         public static final String CAMPO_FECHANACIMIENTO_USUARIO = "fechaNacimiento_Usuario";
         public static final String CAMPO_IDRUTINAACTUAL_USUARIO = "idRutinaActual_Usuario";
+        public static final String CAMPO_CORREO_USUARIO = "corre_Usuario";
 
 
         public static final String CREAR_TABLA_CLASIFICACION = "CREATE TABLE " + TABLA_CLASIFICACION + " " +
@@ -298,7 +327,8 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
                 "" + CAMPO_EDAD_USUARIO + " INTEGER, " +
                 "" + CAMPO_TELEFONO_USUARIO + " TEXT, " +
                 "" + CAMPO_DIRECCION_USUARIO + " TEXT, " +
-                "" + CAMPO_FECHANACIMIENTO_USUARIO + " NUMERIC, " +
+                "" + CAMPO_CORREO_USUARIO + " TEXT, " +
+                "" + CAMPO_FECHANACIMIENTO_USUARIO + " TEXT, " +
                 "" + CAMPO_IDRUTINAACTUAL_USUARIO + " INTEGER, " +
                 "FOREIGN KEY (" + CAMPO_IDRUTINAACTUAL_USUARIO + ") " +
                 "   REFERENCES " + TABLA_RUTINAACTUAL + " (" + CAMPO_ID_RUTINAACTUAL + ") " +

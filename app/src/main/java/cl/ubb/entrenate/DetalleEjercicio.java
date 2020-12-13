@@ -89,7 +89,7 @@ public class DetalleEjercicio extends AppCompatActivity implements Serializable 
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
                 // set message, title, and icon
                 .setTitle("Eliminar ejercicio")
-                .setMessage("¿Quieres eliminar este ejercicio")
+                .setMessage("¿Quieres eliminar este ejercicio?")
                 .setIcon(R.drawable.ic_baseline_delete_forever_24)
 
                 .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
