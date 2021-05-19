@@ -5,16 +5,21 @@ import java.sql.Blob;
 public class Ejercicios {
     private int id;
     private String nombre;
-    private String descripción;
-    private byte[] imagen;
+    private String descripcion;
     private String video;
+    private int id_clasificacion;
+    private String url;
+    private String NombreClasificacion;
 
-    public Ejercicios(int id, String nombre, String descripción, byte[] imagen, String video) {
+    public Ejercicios(int id, String nombre, String descripcion, String video, int id_clasificacion, String url, String NombreClasificacion) {
         this.id = id;
         this.nombre = nombre;
-        this.descripción = descripción;
-        this.imagen = imagen;
+        this.descripcion = descripcion;
+        //this.imagen = imagen;
         this.video = video;
+        this.id_clasificacion=id_clasificacion;
+        this.url=url;
+        this.NombreClasificacion=NombreClasificacion;
     }
 
     public Ejercicios() {
@@ -32,24 +37,40 @@ public class Ejercicios {
         return nombre;
     }
 
+    public int getId_clasificacion() {
+        return id_clasificacion;
+    }
+    public void setId_clasificacion(int id_clasificacion) {
+        this.id_clasificacion = id_clasificacion;
+    }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    public String getDescripción() {
-        return descripción;
+    public String getDescripcion() {
+        return descripcion;
     }
 
     public void setDescripción(String descripción) {
-        this.descripción = descripción;
+        this.descripcion = descripción;
     }
 
-    public byte[] getImagen() {
+   /* public byte[] getImagen() {
         return imagen;
     }
 
     public void setImagen(byte[] imagen) {
         this.imagen = imagen;
+    }
+*/
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getVideo() {
@@ -60,5 +81,11 @@ public class Ejercicios {
         this.video = video;
     }
 
+    public String getNombreClasificacion() {
+        return NombreClasificacion;
+    }
 
+    public void setNombreClasificacion(String nombreClasificacion) {
+        NombreClasificacion = nombreClasificacion;
+    }
 }

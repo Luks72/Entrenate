@@ -1,15 +1,21 @@
 package cl.ubb.entrenate.entidades;
 
+import java.util.Date;
+
 public class Rutina {
 
     private int id;
     private String nombre;
     private String descripcion;
+    private int vecesxsemana;
+    private int idEjercicio;
 
-    public Rutina(int id, String nombre, String descripcion) {
+    public Rutina(int id, String nombre, String descripcion, int idEjercicio, int vecesxsemana) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.idEjercicio = idEjercicio;
+        this.vecesxsemana = vecesxsemana;
     }
 
     public Rutina() {
@@ -27,8 +33,24 @@ public class Rutina {
         return nombre;
     }
 
+    public int getIdEjercicio() {
+        return idEjercicio;
+    }
+
+    public void setIdEjercicio(int idEjercicio) {
+        this.idEjercicio = idEjercicio;
+    }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public int getVecesxsemana() {
+        return vecesxsemana;
+    }
+
+    public void setVecesxsemana(int vecesxsemana) {
+        this.vecesxsemana = vecesxsemana;
     }
 
     public String getDescripcion() {

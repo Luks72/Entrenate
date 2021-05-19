@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".AgregarUsuario">
 
-    <EditText
+    <!-- <EditText
         android:id="@+id/txt_agregarUsuario_nombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,16 +17,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 
-    <EditText
-        android:id="@+id/txt_agregarUsuario_correo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="176dp"
-        android:ems="10"
-        android:hint="Correo"
-        android:inputType="textEmailAddress"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
 
     <EditText
         android:id="@+id/txt_agregarUsuario_fechaNacimiento"
@@ -62,39 +52,54 @@
         android:inputType="textPersonName"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
+        -->
+
+    <EditText
+        android:id="@+id/txt_agregarUsuario_correo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Correo"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.238"
+        tools:layout_editor_absoluteX="16dp" />
 
     <EditText
         android:id="@+id/txt_agregarUsuario_contraseña"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="472dp"
         android:ems="10"
         android:hint="Contraseña"
         android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.345"
         tools:layout_editor_absoluteX="0dp" />
 
     <EditText
         android:id="@+id/txt_agregarUsuario_confirmarContraseña"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="552dp"
         android:ems="10"
         android:hint="Confirmar contraseña"
         android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.443"
         tools:layout_editor_absoluteX="0dp" />
 
     <Button
         android:id="@+id/btn_agregarUsuario_agregar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="152dp"
-        android:layout_marginRight="152dp"
-        android:layout_marginBottom="56dp"
         android:text="Agregar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.715" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

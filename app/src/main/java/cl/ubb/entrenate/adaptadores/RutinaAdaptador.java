@@ -12,32 +12,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
 import cl.ubb.entrenate.R;
 import cl.ubb.entrenate.entidades.Ejercicios;
+import cl.ubb.entrenate.entidades.Rutina;
 
-public class ImagenesAdaptador extends BaseAdapter {
+public class RutinaAdaptador extends BaseAdapter {
     private Context context;
-    private ArrayList<Ejercicios> ejercicios;
+    private ArrayList<Rutina> rutinas;
     private ArrayList<String> nombres;
 
 
-    public ImagenesAdaptador(Context context, ArrayList<Ejercicios> ejercicios ) {
+    public RutinaAdaptador(Context context, ArrayList<Rutina> rutinas) {
         this.context = context;
-        this.ejercicios = ejercicios;
+        this.rutinas = rutinas;
     }
 
     @Override
     public int getCount() {
-        return ejercicios.size();
+        return rutinas.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return ejercicios.get(position);
+        return rutinas.get(position);
     }
 
     @Override
@@ -45,7 +44,6 @@ public class ImagenesAdaptador extends BaseAdapter {
         return 0;
     }
     private class ViewHolder{
-        ImageView imagen;
         TextView nombre;
     }
 
@@ -54,17 +52,13 @@ public class ImagenesAdaptador extends BaseAdapter {
         ViewHolder holder = new ViewHolder();
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.item_grid, null);
+            convertView = layoutInflater.inflate(R.layout.rutinas_grid, null);
         }
 
-        holder.nombre = (TextView) convertView.findViewById(R.id.texto);
-        holder.imagen = (ImageView) convertView.findViewById(R.id.imagen);
-        Ejercicios ej = ejercicios.get(position);
+        holder.nombre = (TextView) convertView.findViewById(R.id.nombre_rutina);
+        Rutina ej = rutinas.get(position);
         holder.nombre.setText(ej.getNombre());
 
-        String url = ej.getUrl();
-        Picasso.get().load(url).into(holder.imagen);
-        //holder.imagen.setImageBitmap(bitmap);
 
         return convertView;
     }

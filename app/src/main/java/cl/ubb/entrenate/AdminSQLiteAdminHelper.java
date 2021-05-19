@@ -34,6 +34,7 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
         db.execSQL(CREAR_TABLA_RUTINA);
         db.execSQL(CREAR_TABLA_RUTINAACTUAL);
         db.execSQL(CREAR_TABLA_USUARIO);
+        db.execSQL(CREAR_TABLA_EJERCICIOSARUTINAS);
     }
 
     @Override
@@ -67,12 +68,94 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
 
     }
 
+    public boolean agregar_rutina (String nombre, String descripcion, int vsx){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues value = new ContentValues();
+        value.put(CAMPO_NOMBRE_RUTINA, nombre);
+        value.put(CAMPO_DESCRIPCION_RUTINA, descripcion);
+        value.put(CAMPO_VECESXSEMANA_RUTINA, vsx);
+
+        long result = db.insert(TABLA_RUTINA, null, value);
+
+        return result != -1 ;
+    }
+
+    public Cursor ver_rutinas(){
+        SQLiteDatabase db= this.getReadableDatabase();
+        String query ="SELECT * FROM "+TABLA_RUTINA;
+        Cursor cursor = db.rawQuery(query, null);
+
+        return cursor;
+
+    }
+
+    public Cursor buscar_clasificacion(int id){
+        SQLiteDatabase db= this.getReadableDatabase();
+        String query ="SELECT * FROM "+TABLA_CLASIFICACION+" WHERE "+id+ " = " +CAMPO_ID_CLASIFICACION;
+        Cursor cursor = db.rawQuery(query, null);
+
+        return cursor;
+
+    }
+
+    public Cursor buscar_ejercicio(int id){
+        SQLiteDatabase db= this.getReadableDatabase();
+        String query ="SELECT * FROM "+TABLA_EJERCICIOS+" WHERE "+id+ " = " +CAMPO_IDRUTINA_EJERICIOS;
+        Cursor cursor = db.rawQuery(query, null);
+
+        return cursor;
+
+    }
+
     public Cursor ver_ejercicios(){
         SQLiteDatabase db= this.getReadableDatabase();
         String query ="SELECT * FROM "+TABLA_EJERCICIOS;
         Cursor cursor = db.rawQuery(query, null);
 
         return cursor;
+    }
+
+    public Cursor buscar_ejerciciosEspecifico(long id){
+        SQLiteDatabase db= this.getReadableDatabase();
+        String query ="SELECT * FROM "+TABLA_EJERCICIOS+ " WHERE " +id+ " = " +CAMPO_ID_EJERCICIOS;
+        Cursor cursor = db.rawQuery(query, null);
+
+        return cursor;
+    }
+
+    public Boolean agregar_ejerciciosARutina (int idEjercicio, int idRutina){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues value = new ContentValues();
+        value.put(CAMPO_IDEJERCICIO_EJERCICIOSARUTINA, idEjercicio);
+        value.put(CAMPO_IDRUTINA_EJERCICIOSARUTINA, idRutina);
+
+        long result = db.insert(TABLA_EJERCICIOSARUTINA, null, value);
+
+        return result != -1;
+
+    }
+
+    public Cursor buscar_ejercicioARutina(int id){
+        SQLiteDatabase db= this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " +TABLA_EJERCICIOS+ " WHERE " +CAMPO_ID_EJERCICIOS+" = "+ id
+                        ;
+        Cursor cursor = db.rawQuery(query, null);
+
+        return cursor;
+
+    }
+
+    public Cursor buscar_ejercicioARutina2(int id){
+        SQLiteDatabase db= this.getReadableDatabase();
+        String query =
+                "SELECT "+CAMPO_IDEJERCICIO_EJERCICIOSARUTINA+" FROM " +TABLA_EJERCICIOSARUTINA+ " WHERE " +CAMPO_IDRUTINA_EJERCICIOSARUTINA+" = "+ id
+                ;
+        Cursor cursor = db.rawQuery(query, null);
+
+        return cursor;
+
     }
 
     public Boolean agregar_ejercicios (String nombre, String descripcion, int idClasificacion, byte [] foto, String video){
@@ -94,22 +177,27 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
     public void eliminar_ejercicio(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         if(db!=null){
-            db.execSQL("DELETE FROM "+TABLA_EJERCICIOS+" WHERE "+id+" = "+CAMPO_ID_EJERCICIOS);
+            db.execSQL("DELETE FROM "+TABLA_EJERCICIOS+" WHERE "+CAMPO_IDRUTINA_EJERICIOS+ "="+id);
             db.close();
         }
     }
 
-    public Boolean editar_ejercicios (String nombre, String descripcion, int idClasificacion, byte [] foto, String video, int id){
+    public void eliminar_rutina(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(db!=null){
+            db.execSQL("DELETE FROM "+TABLA_RUTINA+" WHERE "+CAMPO_ID_RUTINA+ "="+id);
+            db.execSQL("DELETE FROM "+TABLA_EJERCICIOSARUTINA+" WHERE "+CAMPO_IDRUTINA_EJERCICIOSARUTINA+ "="+id);
+            db.close();
+        }
+    }
+
+    public Boolean editar_rutina (int id, String desc){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues value = new ContentValues();
-        value.put(CAMPO_NOMBRE_EJERCICIOS, nombre);
-        value.put(CAMPO_DESCRIPCION_EJERCICIOS, descripcion);
-        value.put(CAMPO_IDCLASIFICACION_EJERICIOS, idClasificacion);
-        value.put(CAMPO_FOTO_EJERCICIOS, foto);
-        value.put(CAMPO_VIDEO_EJERCICIOS, video);
+        value.put(CAMPO_DESCRIPCION_RUTINA, desc);
 
-        long result = db.update(TABLA_EJERCICIOS, value, "id="+id, null);
+        long result = db.update(TABLA_RUTINA, value, CAMPO_ID_RUTINA+" = "+id, null);
 
         return result != -1;
 
@@ -144,7 +232,7 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
     }
 
     public Boolean revisar_usuario (String correo, String contrasena){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM "+TABLA_USUARIO+" WHERE "+CAMPO_CORREO_USUARIO+"=? AND "+CAMPO_CONTRASEÑA_USUARIO+"=?", new String[]{correo, contrasena});
         if(cursor.getCount()>0){
             return true;
@@ -152,14 +240,14 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
             return false;
         }
     }
-    public Cursor prueba_innerJoin(){
+    public Cursor prueba_innerJoin(int id){
         SQLiteDatabase db = this.getReadableDatabase();
 
         String query =
         "SELECT " +CAMPO_NOMBRE_EJERCICIOS+ ", " +CAMPO_NOMBRE_CLASIFICACION+
         " FROM " +TABLA_EJERCICIOS+
         " INNER JOIN " +TABLA_CLASIFICACION+
-        " ON " +CAMPO_IDCLASIFICACION_EJERICIOS+ " = " +CAMPO_ID_CLASIFICACION;
+        " ON " +id+ " = " +CAMPO_ID_CLASIFICACION;
 
 
         Cursor cursor = db.rawQuery(query, null);
@@ -190,7 +278,13 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
         public static final String CAMPO_FOTO_EJERCICIOS = "foto_Ejercicios";
         public static final String CAMPO_VIDEO_EJERCICIOS = "video_Ejercicios";
         public static final String CAMPO_IDCLASIFICACION_EJERICIOS = "idClasificacion_Ejercicios";
+        public static final String CAMPO_IDRUTINA_EJERICIOS = "idRutina_Ejercicios";
 
+        //Ejercicios a Rutina
+        public static final String TABLA_EJERCICIOSARUTINA= "ejerciciosarutina";
+        public static final String CAMPO_ID_EJERCICIOSARUTINA = "id_EjerciciosARutina";
+        public static final String CAMPO_IDEJERCICIO_EJERCICIOSARUTINA = "idEjercicio_EjerciciosARutina";
+        public static final String CAMPO_IDRUTINA_EJERCICIOSARUTINA = "idRutina_EjerciciosARutina";
 
         //Preparador Fisico
         public static final String TABLA_PREPARADOR = "preparador";
@@ -213,6 +307,7 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
         public static final String TABLA_RUTINA = "rutina";
         public static final String CAMPO_ID_RUTINA = "id_Rutina";
         public static final String CAMPO_NOMBRE_RUTINA = "nombre_Rutina";
+        public static final String CAMPO_VECESXSEMANA_RUTINA = "vecesxsemana_Rutina";
         public static final String CAMPO_DESCRIPCION_RUTINA = "descripcion_Rutina";
         public static final String CAMPO_IDEJERCICIO_RUTINA = "idEjercicio_Rutina";
 
@@ -240,7 +335,7 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
         public static final String CAMPO_DIRECCION_USUARIO = "direccion_Usuario";
         public static final String CAMPO_FECHANACIMIENTO_USUARIO = "fechaNacimiento_Usuario";
         public static final String CAMPO_IDRUTINAACTUAL_USUARIO = "idRutinaActual_Usuario";
-        public static final String CAMPO_CORREO_USUARIO = "corre_Usuario";
+        public static final String CAMPO_CORREO_USUARIO = "correo_Usuario";
 
 
         public static final String CREAR_TABLA_CLASIFICACION = "CREATE TABLE " + TABLA_CLASIFICACION + " " +
@@ -259,10 +354,28 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
                 "" + CAMPO_FOTO_EJERCICIOS + " BLOB, " +
                 "" + CAMPO_VIDEO_EJERCICIOS + " TEXT, " +
                 "" + CAMPO_IDCLASIFICACION_EJERICIOS + " INTEGER, " +
+                "" + CAMPO_IDRUTINA_EJERICIOS + " INTEGER, " +
                 "FOREIGN KEY (" + CAMPO_IDCLASIFICACION_EJERICIOS + ") " +
                 "   REFERENCES " + TABLA_CLASIFICACION + "(" + CAMPO_ID_CLASIFICACION + ")" +
                 "       ON DELETE CASCADE" +
+                "       ON UPDATE CASCADE, "+
+                "FOREIGN KEY (" + CAMPO_IDRUTINA_EJERICIOS + ") " +
+                "   REFERENCES " + TABLA_RUTINA+ "(" + CAMPO_ID_RUTINA + ")" +
+                "       ON DELETE CASCADE" +
                 "       ON UPDATE CASCADE)";
+
+    public static final String CREAR_TABLA_EJERCICIOSARUTINAS = "CREATE TABLE " + TABLA_EJERCICIOSARUTINA + "" +
+            "(" + CAMPO_ID_EJERCICIOSARUTINA + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "" + CAMPO_IDEJERCICIO_EJERCICIOSARUTINA + " INTEGER, " +
+            "" + CAMPO_IDRUTINA_EJERCICIOSARUTINA + " INTEGER, " +
+            "FOREIGN KEY (" + CAMPO_IDEJERCICIO_EJERCICIOSARUTINA + ") " +
+            "   REFERENCES " + TABLA_EJERCICIOS + "(" + CAMPO_ID_EJERCICIOS + ")" +
+            "       ON DELETE CASCADE" +
+            "       ON UPDATE CASCADE, "+
+            "FOREIGN KEY (" + CAMPO_IDRUTINA_EJERCICIOSARUTINA + ") " +
+            "   REFERENCES " + TABLA_RUTINA+ "(" + CAMPO_ID_RUTINA + ")" +
+            "       ON DELETE CASCADE" +
+            "       ON UPDATE CASCADE)";
 
         public static final String CREAR_TABLA_PREPARADOR = "CREATE TABLE " + TABLA_PREPARADOR + "" +
                 "(" + CAMPO_ID_PREPARADOR + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -295,6 +408,7 @@ public class AdminSQLiteAdminHelper extends SQLiteOpenHelper {
                 "(" + CAMPO_ID_RUTINA + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "" + CAMPO_NOMBRE_RUTINA + " TEXT, " +
                 "" + CAMPO_DESCRIPCION_RUTINA + " TEXT, " +
+                "" + CAMPO_VECESXSEMANA_RUTINA + " INTEGER, " +
                 "" + CAMPO_IDEJERCICIO_RUTINA + " INTEGER, " +
                 "FOREIGN KEY (" + CAMPO_IDEJERCICIO_RUTINA + ") " +
                 "   REFERENCES " + TABLA_EJERCICIOS + "(" + CAMPO_ID_EJERCICIOS + ") " +

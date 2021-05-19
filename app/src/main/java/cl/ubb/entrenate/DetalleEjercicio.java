@@ -8,15 +8,19 @@ import androidx.navigation.Navigation;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
 
@@ -25,8 +29,9 @@ import cl.ubb.entrenate.ui.ejercicios.EjerciciosFragment;
 
 public class DetalleEjercicio extends AppCompatActivity implements Serializable {
 
+    private static final String TAG = "MENSAJE";
     private ImageView img_foto;
-    private TextView txt_nombre, txt_descripcion;
+    private TextView txt_nombre, txt_descripcion, txtx_clasificacion;
     //EditText nombreEjercicio, nombreClasificacion;
     private AdminSQLiteAdminHelper db;
     private Button btn_eliminar, btn_video, btn_editar;
@@ -39,8 +44,10 @@ public class DetalleEjercicio extends AppCompatActivity implements Serializable 
 
         db = new AdminSQLiteAdminHelper(this, "entrenate_bdd", null,1);
 
+
         img_foto= findViewById(R.id.img_detalleEjercicio);
         txt_descripcion = findViewById(R.id.txt_detalleEjercicio_descripcion);
+        txtx_clasificacion = findViewById(R.id.txt_detalleEjercicio_clasificacion);
         btn_eliminar = findViewById(R.id.btn_detalleEjercicio_eliminar);
         btn_video = findViewById(R.id.btn_detalleEjercicio_video);
         btn_editar = findViewById(R.id.btn_detalleEjercicio_editar);
@@ -50,7 +57,16 @@ public class DetalleEjercicio extends AppCompatActivity implements Serializable 
         String nombre_ejercicio = (String) getIntent().getExtras().get("nombre");
         String video_ejercicio = (String) getIntent().getExtras().get("video");
         String descripcion_ejercicio = (String) getIntent().getExtras().get("descripcion");
-        byte[] imagen_ejercicio = (byte[]) getIntent().getExtras().get("imagen");
+        txt_descripcion.setText((String) getIntent().getExtras().get("descripcion"));
+        String url_ejercicio = (String) getIntent().getExtras().get("url");
+        Picasso.get().load(url_ejercicio).into(img_foto);
+        setTitle(nombre_ejercicio);
+        //byte[] imagen_ejercicio = (byte[]) getIntent().getExtras().get("imagen");
+        //int id_clas=(int) getIntent().getIntExtra("idClas",0);
+        //txtx_clasificacion.setText(String.valueOf(id_clas));
+        //consultaClasificación(id_clas);
+
+
         btn_eliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,17 +86,16 @@ public class DetalleEjercicio extends AppCompatActivity implements Serializable 
             }
         });
 
-        setTitle(nombre_ejercicio);
-        verImagen();
+
+        //rellenarDetalle();
 
     }
 
-    public void verImagen(){
+    public void rellenarDetalle(){
         String descripcion_ejercicio = (String) getIntent().getExtras().get("descripcion");
-        byte[] imagen_ejercicio = (byte[]) getIntent().getExtras().get("imagen");
-        txt_descripcion.setText(descripcion_ejercicio);
-        Bitmap bmp= BitmapFactory.decodeByteArray(imagen_ejercicio, 0 , imagen_ejercicio.length);
-        img_foto.setImageBitmap(bmp);
+        //Log.e(TAG, descripcion_ejercicio);
+
+
 
     }
 
@@ -113,6 +128,17 @@ public class DetalleEjercicio extends AppCompatActivity implements Serializable 
 
         return myQuittingDialogBox;
     }
+
+   /* public void consultaClasificación(int idEjercicio){
+        Cursor cursor = db.buscar_clasificacion(idEjercicio);
+        while (cursor.moveToNext()){
+            String nombreClasificacion = cursor.getString(1);
+            txtx_clasificacion.setText(nombreClasificacion);
+        }
+
+
+
+    }*/
 
 
 

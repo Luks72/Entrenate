@@ -22,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btn_ejercicios:
                 miIntent= new Intent(MainActivity.this, AgregarEjerciciosActivity.class);
+                break;
+            case R.id.btn_rutina:
+                miIntent= new Intent(MainActivity.this, AgregarRutinaActivity.class);
+                break;
         }
         if(miIntent!=null){
             startActivity(miIntent);

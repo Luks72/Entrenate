@@ -23,6 +23,12 @@
         android:label="@string/menu_rutinas"
         tools:layout="@layout/fragment_rutinas" />
 
+    <fragment
+        android:id="@+id/nav_perfil"
+        android:name="cl.ubb.entrenate.ui.perfil.PerfilFragment"
+        android:label="perfil"
+        tools:layout="@layout/perfil_fragment" />
+
 
 
 </navigation>
