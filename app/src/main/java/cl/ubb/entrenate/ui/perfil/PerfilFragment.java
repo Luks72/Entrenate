@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
@@ -125,14 +126,23 @@ public class PerfilFragment extends Fragment {
                             for(QueryDocumentSnapshot documentSnapshot: task.getResult()){
                                 nombreRutinas.add(documentSnapshot.getString("rutinaActual"));
                                 Log.e("rutinas", "rutinas agregadas al perfil");
-                                DocumentReference documentReference = bdd.collection("rutinas").document(documentSnapshot.getString("rutinaActual"));
-                                documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task1) {
-                                        if (task.isComplete()) {
-                                            DocumentSnapshot document = task1.getResult();
-                                            ArrayList<String> arrayList = (ArrayList<String>) document.get("ejercicios");
-                                            Log.e("Listado ejercicios", ""+arrayList);
+                                bdd.collection("rutinas")
+                                        .whereEqualTo("nombre", documentSnapshot.getString("rutinaActual"))
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                                                if (task1.isComplete()) {
+                                                    for (QueryDocumentSnapshot documentSnapshots1 : task1.getResult()) {
+                                                        rutinas.add(documentSnapshots1.toObject(Rutina.class));
+                                                        Log.e("obejto", "Agregado con exito");
+                                                    }
+                                                }else {
+                                                    Log.e("Algo salió mal", "no sé donde");
+                                                }
+
+                                            }
+                                        });
                                             //rutinas.add(document.get);
                                             /*for (String s : nombreRutinas) {
                                                 bdd.collection("rutinas")
@@ -169,27 +179,38 @@ public class PerfilFragment extends Fragment {
 
                                                         );
                                             }*/
-                                        }else {
-                                            Toast.makeText(getActivity(), "No hay ejercicios agregados", Toast.LENGTH_SHORT).show();
-                                        }
+
                                     }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                     Log.e("AA0", "algo salió mal");
-                                    }
-                                });
+
 
                             }
                             adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, nombreRutinas);
                             lista.setAdapter(adapter);
 
                         }
-                    }
+
                 });
 
 
         txt_correo.setText(correo);
+
+        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Rutina selected = rutinas.get(position);
+                String nombre = selected.getNombre();
+                String descripcion = selected.getDescripcion();
+                int vsx = selected.getVecesxsemana();
+                int ide = selected.getId();
+                startActivity(new Intent(getActivity(), DetalleRutina.class)
+                        .putExtra("nombre", nombre)
+                        .putExtra("descripcion", descripcion)
+                        .putExtra("vxs", vsx)
+                        .putExtra("id", ide));
+
+
+            }
+        });
 
 
         return root;

@@ -85,9 +85,6 @@ public class DetalleRutina extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
         String correo = prefs.getString("correo", null);
 
-
-
-
         String nombre_rutina = (String) getIntent().getExtras().get("nombre");
         String descripcion_rutina = (String) getIntent().getExtras().get("descripcion");
         int id_ejercicio=(int) getIntent().getIntExtra("idEjercicio",0);
@@ -219,7 +216,6 @@ public class DetalleRutina extends AppCompatActivity {
                if (task.isSuccessful()) {
                    DocumentSnapshot document = task.getResult();
                    ArrayList<String> arrayList = (ArrayList<String>) document.get("ejercicios");
-                   //Do what you need to do with your ArrayList
                    if (arrayList != null) {
                        for (String s : arrayList) {
                                bdd.collection("clasificacion")
