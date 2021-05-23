@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_detalleRutina"
+        android:layout_width="393dp"
+        android:layout_height="228dp"
+        android:layout_margin="8dp"
+        android:paddingTop="10dp"
+        app:cardElevation="10dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="366dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
+
+            <!-- Media -->
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="49dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/nombre_detalleRutina"
+                    android:layout_width="225dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="nombre ejercicio"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <LinearLayout
+                    android:layout_width="145dp"
+                    android:layout_height="38dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/detalle_detalleRutina"
+                        android:layout_width="83dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Detalle" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <!-- Title, secondary and supporting text -->
+
+                <TextView
+                    android:id="@+id/series_detalleRutina"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Series"
+                    android:textSize="18dp"/>
+
+                <TextView
+                    android:id="@+id/repeticiones_detalleRutina"
+                    android:layout_width="177dp"
+                    android:layout_height="wrap_content"
+                    android:text="repeticiones"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/descanso_detalleRutina"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="descanso"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/instrucciones_detalleRutina"
+                    android:layout_width="338dp"
+                    android:layout_height="43dp"
+                    android:text="instrucciones"
+                    android:textSize="16dp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

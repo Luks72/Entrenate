@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,24 +41,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import cl.ubb.entrenate.adaptadores.DetalleRutinaAdaptador;
 import cl.ubb.entrenate.adaptadores.ImagenesAdaptador;
+import cl.ubb.entrenate.entidades.DetalleEjercicioRutina;
 import cl.ubb.entrenate.entidades.Ejercicios;
+import cl.ubb.entrenate.entidades.Rutina;
 
 public class DetalleRutina extends AppCompatActivity {
 
     private TextView txt_nombre, txt_descripcion, txt_ejercicio_nombre;
     private AdminSQLiteAdminHelper db;
+    EditText itxt_repeticiones;
     Button btn_agregarEjercicio, btn_editar, btn_eliminar, btn_asignar;
-    ListView lista;
-    ArrayList<String> listItem, listEjercicios, nombres_listview;
-    ArrayAdapter adapter, adapterEjercicios;
+    ListView lista, lista_repeticiones;
+    ArrayList<String> listItem, listEjercicios, nombres_listview, repeticiones, list_repeticiones, arr;
+    ArrayAdapter adapter, adapterEjercicios, adapterRepeticiones;
     Spinner spinnerEjercicios;
     private ArrayList<Ejercicios> ejercicios;
-    int i;
+    private GridView gridView;
+    DetalleRutinaAdaptador detalleRutinaAdaptador;
+    ArrayList<DetalleEjercicioRutina> detalleEjercicioRutinas;
 
     FirebaseFirestore bdd;
     Boolean result;
-    DocumentReference rutinaActual;
+    DocumentReference rutinaActual, rutina;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,17 +76,24 @@ public class DetalleRutina extends AppCompatActivity {
         bdd= FirebaseFirestore.getInstance();
 
         ejercicios= new ArrayList<>();
+        detalleEjercicioRutinas= new ArrayList<>();
         txt_descripcion = findViewById(R.id.txt_rutina_descripcion);
-        btn_agregarEjercicio = findViewById(R.id.btn_detalleRutina_agregar);
-        btn_eliminar = findViewById(R.id.btn_detalleRutina_eliminar);
-        btn_editar = findViewById(R.id.btn_detalleRutina_editar);
+        btn_agregarEjercicio = findViewById(R.id.btn_agregar_detalleRutina);
+        //btn_eliminar = findViewById(R.id.btn_detalleRutina_eliminar);
+        //btn_editar = findViewById(R.id.btn_detalleRutina_editar);
         btn_asignar = findViewById(R.id.btn_detalleRutina_asignar);
-        lista = findViewById(R.id.list_detalleRutina);
-        spinnerEjercicios = findViewById(R.id.sp_detalleRutina);
+        gridView = (GridView) findViewById(R.id.grid_ejericios);
+        //lista = findViewById(R.id.list_detalleRutina);
+        //lista_repeticiones = findViewById(R.id.list_detalleRutina_repeticiones);
+        //spinnerEjercicios = findViewById(R.id.sp_detalleRutina);
+        //itxt_repeticiones = findViewById(R.id.itxt_detalleRutina_repeticiones);
 
         listItem = new ArrayList<>();
         listEjercicios = new ArrayList<>();
         nombres_listview = new ArrayList<>();
+        repeticiones = new ArrayList<>();
+        arr = new ArrayList<>();
+
         AlertDialog alert = confirmar();
         ArrayList<String> nombre_ejercicio = new ArrayList<>();
 
@@ -95,46 +110,26 @@ public class DetalleRutina extends AppCompatActivity {
 
         setTitle(nombre_rutina);
         viewData(nombre_rutina);
-        spinner();
+        //spinner();
+
+
         btn_agregarEjercicio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nombre_ejercicio.add(spinnerEjercicios.getSelectedItem().toString());
-                String nombre1 = spinnerEjercicios.getSelectedItem().toString();
-                int pos = spinnerEjercicios.getSelectedItemPosition();
-                if(pos!=0){
-                    if(haydatos(nombre_rutina)){
-                        documentReference.update("ejercicios", FieldValue.arrayUnion(nombre1));
-                        Toast.makeText(DetalleRutina.this, "Ejercicio agregado", Toast.LENGTH_SHORT).show();
-                    }else{
-                       Map<String, Object> data = new HashMap<>();
-                        data.put("ejercicios", nombre_ejercicio);
-                        bdd.collection("rutinas").document(nombre_rutina)
-                                .set(data, SetOptions.merge());
-                        Toast.makeText(DetalleRutina.this, "Ejercicio agregado", Toast.LENGTH_SHORT).show();
-                    }
-                    /*Map<String, Object> data = new HashMap<>();
-                    data.put("ejercicios", nombre_ejercicio);
-                    bdd.collection("rutinas").document(nombre_rutina)
-                            .set(data, SetOptions.merge());*/
-                    //db.agregar_ejerciciosARutina(position, id_rutina);
-                    //Toast.makeText(DetalleRutina.this, "Ejercicio agregado", Toast.LENGTH_SHORT).show();
-                    //adapter.notifyDataSetChanged();
-                }else{
-                    Toast.makeText(DetalleRutina.this, "Debe seleccionar un ejercicio", Toast.LENGTH_SHORT).show();
-                }
-
+                Intent intent = new Intent(DetalleRutina.this, AgregarEjercicioARutina.class)
+                        .putExtra("nombreRutina", nombre_rutina);
+                startActivity(intent);
             }
         });
 
-        btn_eliminar.setOnClickListener(new View.OnClickListener() {
+        /*btn_eliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alert.show();
             }
-        });
+        });*/
 
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Ejercicios selected = ejercicios.get(position);
@@ -154,19 +149,19 @@ public class DetalleRutina extends AppCompatActivity {
 
 
             }
-        });
+        });*/
 
-        btn_editar.setOnClickListener(new View.OnClickListener() {
+        /*btn_editar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(DetalleRutina.this, EditarRutina.class)
                         .putExtra("id", id_rutina));
             }
-        });
+        });*/
 
 
 
-        rutinaActual.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        /*rutinaActual.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
@@ -200,80 +195,32 @@ public class DetalleRutina extends AppCompatActivity {
                     }
                 }
             }
-        });
+        });*/
 
         txt_descripcion.setText(descripcion_rutina);
 
 
     }
 
-   private void viewData(String nombre_rutina) {
-       DocumentReference docRef = bdd.collection("rutinas").document(nombre_rutina);
+    private void viewData(String nombre_rutina) {
 
-       docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-           @Override
-           public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-               if (task.isSuccessful()) {
-                   DocumentSnapshot document = task.getResult();
-                   ArrayList<String> arrayList = (ArrayList<String>) document.get("ejercicios");
-                   if (arrayList != null) {
-                       for (String s : arrayList) {
-                               bdd.collection("clasificacion")
-                                       .get()
-                                       .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                  @Override
-                                                                  public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                      if (task.isSuccessful()) {
-                                                                          for (QueryDocumentSnapshot documentSnapshots : task.getResult()) {
-                                                                              bdd.collection("clasificacion").document(documentSnapshots.getString("nombre")).collection("ejercicios")
-                                                                                      .whereEqualTo("nombre", s)
-                                                                                      .get()
-                                                                                      .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                                                                                 @Override
-                                                                                                                 public void onComplete(@NonNull Task<QuerySnapshot> task1) {
-                                                                                                                     if (task1.isSuccessful()) {
-                                                                                                                         for (QueryDocumentSnapshot documentSnapshots1 : task1.getResult()) {
-                                                                                                                             listItem.add(documentSnapshots1.getString("nombre"));
-                                                                                                                             ejercicios.add(documentSnapshots1.toObject(Ejercicios.class));
+        bdd.collection("rutinas").document(nombre_rutina).collection("ejercicios")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            detalleEjercicioRutinas.clear();
+                            for(QueryDocumentSnapshot documentSnapshot: task.getResult()){
+                                detalleEjercicioRutinas.add(documentSnapshot.toObject(DetalleEjercicioRutina.class));
 
-                                                                                                                         }
-                                                                                                                         adapter = new ArrayAdapter(DetalleRutina.this, android.R.layout.simple_list_item_1, listItem);
-                                                                                                                         lista.setAdapter(adapter);
-                                                                                                                     }
-                                                                                                                 }
-                                                                                                             }
-
-                                                                                      );
-                                                                          }
-
-                                                                      }
-                                                                  }
-                                                              }
-
-                                       );
-                           }
-                       }else {
-                       Toast.makeText(DetalleRutina.this, "No hay ejercicios agregados", Toast.LENGTH_SHORT).show();
-                   }
-
-
-                   //nombres_listview = ((ArrayList<String>) document.get("ejercicios"));
-
-
-               }
-           }
-       });
-
-
-
-
-
-
-
-
-
-
-
+                            }
+                            detalleRutinaAdaptador = new DetalleRutinaAdaptador(DetalleRutina.this, detalleEjercicioRutinas);
+                            detalleRutinaAdaptador.notifyDataSetChanged();
+                            gridView.setAdapter(detalleRutinaAdaptador);
+                        }
+                    }
+                });
 
         /*Cursor cursor = db.buscar_ejercicioARutina2(id);
         if (cursor.getCount()== 0 ){
@@ -296,7 +243,8 @@ public class DetalleRutina extends AppCompatActivity {
             lista.setAdapter(adapter);
         }*/
 
-   }
+    }
+
 
     public void spinner() {
         /*Cursor cursor = db.ver_ejercicios();

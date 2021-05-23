@@ -59,7 +59,6 @@ public class ListadoNombreEjerciciosAdaptador extends BaseAdapter {
         Ejercicios ej = ejercicios.get(position);
         holder.nombre.setText(ej.getNombre());
 
-
         return convertView;
     }
 }

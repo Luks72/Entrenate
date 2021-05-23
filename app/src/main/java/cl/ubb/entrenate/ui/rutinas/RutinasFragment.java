@@ -127,16 +127,6 @@ public class RutinasFragment extends Fragment {
                                                if (task.isSuccessful()) {
                                                    rutinas.clear();
                                                    for (QueryDocumentSnapshot documentSnapshots : task.getResult()) {
-                                                       /*ejercicios.add(documentSnapshots.getString("nombre"));
-                                                       ejercicios.add(documentSnapshots.getString("desc"));
-                                                       ejercicios.add(documentSnapshots.getString("img"));
-                                                       ejercicios.add(documentSnapshots.getString("vid"));
-                                                       ejercicios.add(documentSnapshots.getString("url"));
-                                                       Log.e("nombre", documentSnapshots.getString("nombre"));
-                                                       Log.e("descripcion", documentSnapshots.getString("desc"));
-                                                       Log.e("img", documentSnapshots.getString("img"));
-                                                       Log.e("vid", documentSnapshots.getString("vid"));
-                                                       Log.e("url", documentSnapshots.getString("url"));*/
                                                        rutinas.add(documentSnapshots.toObject(Rutina.class));
                                                    }
 

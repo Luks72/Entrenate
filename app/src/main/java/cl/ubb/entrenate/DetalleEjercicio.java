@@ -27,7 +27,7 @@ import java.io.Serializable;
 import cl.ubb.entrenate.entidades.Ejercicios;
 import cl.ubb.entrenate.ui.ejercicios.EjerciciosFragment;
 
-public class DetalleEjercicio extends AppCompatActivity implements Serializable {
+public class       DetalleEjercicio extends AppCompatActivity implements Serializable {
 
     private static final String TAG = "MENSAJE";
     private ImageView img_foto;
@@ -51,7 +51,7 @@ public class DetalleEjercicio extends AppCompatActivity implements Serializable 
         btn_eliminar = findViewById(R.id.btn_detalleEjercicio_eliminar);
         btn_video = findViewById(R.id.btn_detalleEjercicio_video);
         btn_editar = findViewById(R.id.btn_detalleEjercicio_editar);
-        AlertDialog alert = confirmar();
+        //AlertDialog alert = confirmar();
 
 
         String nombre_ejercicio = (String) getIntent().getExtras().get("nombre");
@@ -67,12 +67,12 @@ public class DetalleEjercicio extends AppCompatActivity implements Serializable 
         //consultaClasificación(id_clas);
 
 
-        btn_eliminar.setOnClickListener(new View.OnClickListener() {
+        /*btn_eliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alert.show();
             }
-        });
+        });*/
         btn_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +99,7 @@ public class DetalleEjercicio extends AppCompatActivity implements Serializable 
 
     }
 
-    private AlertDialog confirmar() {
+    /*private AlertDialog confirmar() {
         int id_ejercicio = (int) getIntent().getExtras().get("id");
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
                 // set message, title, and icon
@@ -127,7 +127,7 @@ public class DetalleEjercicio extends AppCompatActivity implements Serializable 
                 .create();
 
         return myQuittingDialogBox;
-    }
+    }*/
 
    /* public void consultaClasificación(int idEjercicio){
         Cursor cursor = db.buscar_clasificacion(idEjercicio);
