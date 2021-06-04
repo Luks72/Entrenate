@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "cl.ubb.entrenate"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -50,6 +50,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:23.0.0'
     implementation 'com.google.firebase:firebase-storage:20.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

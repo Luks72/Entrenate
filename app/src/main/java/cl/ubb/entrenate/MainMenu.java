@@ -28,14 +28,14 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setImageResource(R.drawable.ic_baseline_add_24);
-        fab.setOnClickListener(new View.OnClickListener() {
+        //FloatingActionButton fab = findViewById(R.id.fab);
+        //fab.setImageResource(R.drawable.ic_baseline_add_24);
+        /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainMenu.this, MainActivity.class));
             }
-        });
+        });*/
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -63,7 +63,7 @@ public class MainMenu extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    public FloatingActionButton getFab(){
+   /* public FloatingActionButton getFab(){
         return fab;
-    }
+    }*/
 }

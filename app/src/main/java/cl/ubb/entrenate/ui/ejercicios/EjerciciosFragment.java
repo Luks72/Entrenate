@@ -1,8 +1,10 @@
 package cl.ubb.entrenate.ui.ejercicios;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,6 +35,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -65,6 +69,7 @@ public class EjerciciosFragment extends Fragment implements Serializable{
     Spinner spinnerClasificacion;
     ArrayList<String> listEjercicios;
     ArrayAdapter adapterEjercicios;
+    ExtendedFloatingActionButton extendedFloatingActionButton;
 
     FirebaseFirestore bdd;
 
@@ -83,6 +88,14 @@ public class EjerciciosFragment extends Fragment implements Serializable{
         refreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.refresh);
         listEjercicios = new ArrayList<>();
         vacio = (TextView) root.findViewById(R.id.vacio);
+        extendedFloatingActionButton = (ExtendedFloatingActionButton) root.findViewById(R.id.fab_ejercicios);
+
+        SharedPreferences prefs = this.getActivity().getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+        String correo = prefs.getString("correo", null);
+        if(!correo.contains("@admin.cl")){
+            extendedFloatingActionButton.hide();
+            Log.e("logeado", "ud usuario se ha logeado");
+        }
 
         vacio.setVisibility(View.VISIBLE);
         gridView.setEmptyView(vacio);
@@ -127,6 +140,14 @@ public class EjerciciosFragment extends Fragment implements Serializable{
                         .detach(EjerciciosFragment.this)
                         .attach(EjerciciosFragment.this)
                         .commit();
+            }
+        });
+
+        extendedFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent miIntent= new Intent(getActivity(), AgregarEjerciciosActivity.class);
+                startActivity(miIntent);
             }
         });
 

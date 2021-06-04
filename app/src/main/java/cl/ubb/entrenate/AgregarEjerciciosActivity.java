@@ -115,8 +115,6 @@ public class AgregarEjerciciosActivity extends AppCompatActivity {
         b.compress(Bitmap.CompressFormat.PNG, 80, bos);
         byte[] img = bos.toByteArray();
 
-
-
         Object position =  spinnerClasificacion.getSelectedItem().toString();
         String name=nombre.getText().toString();
         String desc=descripcion.getText().toString();
@@ -135,7 +133,6 @@ public class AgregarEjerciciosActivity extends AppCompatActivity {
         nuevoEjercicio = bdd.collection("clasificacion").document(spinnerClasificacion.getSelectedItem().toString()).collection("ejercicios").document(nombre.getText().toString());
 
         nuevoEjercicio.set(data);
-        Log.e("imagen", String.valueOf(img));
         nuevoEjercicio.update("url", downloadUri.toString());
         finish();
 

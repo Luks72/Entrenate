@@ -57,6 +57,7 @@ public class AgregarEjercicioARutina extends AppCompatActivity {
                 String nombre_ejercicio = spinner.getSelectedItem().toString();
                 int pos = spinner.getSelectedItemPosition();
                 if(pos!=0){
+                    if(series !=null && instrucciones !=null && descanso !=null && repeticiones !=null){
                         Map<String, Object> data = new HashMap<>();
                         data.put("series",repeticiones.getText().toString());
                         data.put("repeticiones",repeticiones.getText().toString());
@@ -67,7 +68,14 @@ public class AgregarEjercicioARutina extends AppCompatActivity {
 
                         bdd.collection("rutinas").document(nombre_rutina).collection("ejercicios").document(nombre_ejercicio).set(data, SetOptions.merge());
                         Toast.makeText(AgregarEjercicioARutina.this, "Ejercicio agregado", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }else{
+                        Toast.makeText(AgregarEjercicioARutina.this, "Los campos no puedes estar vacios", Toast.LENGTH_SHORT).show();
                     }
+
+                    }else{
+                    Toast.makeText(AgregarEjercicioARutina.this, "Debe seleccionar un ejercicio", Toast.LENGTH_SHORT).show();
+                }
                     //Map<String, Object> data = new HashMap<>();
                     //data.put("ejercicios", nombre_ejercicio);
                     //bdd.collection("rutinas").document(nombre_rutina)
