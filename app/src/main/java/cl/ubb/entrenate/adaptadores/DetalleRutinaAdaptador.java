@@ -132,7 +132,7 @@ public class DetalleRutinaAdaptador extends BaseAdapter {
         holder.series.setText("Series: " +det.getSeries());
         holder.repeticiones.setText("Repeticiones: " +det.getRepeticiones());
         holder.descanso.setText("Descanso: "+det.getDescanso());
-        holder.instrucciones.setText("instrucciones: "+det.getInstrucciones());
+        holder.instrucciones.setText("Instrucciones: "+det.getInstrucciones());
 
         return convertView;
     }

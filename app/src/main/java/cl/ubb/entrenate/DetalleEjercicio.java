@@ -48,9 +48,9 @@ public class       DetalleEjercicio extends AppCompatActivity implements Seriali
         img_foto= findViewById(R.id.img_detalleEjercicio);
         txt_descripcion = findViewById(R.id.txt_detalleEjercicio_descripcion);
         txtx_clasificacion = findViewById(R.id.txt_detalleEjercicio_clasificacion);
-        btn_eliminar = findViewById(R.id.btn_detalleEjercicio_eliminar);
+        //btn_eliminar = findViewById(R.id.btn_detalleEjercicio_eliminar);
         btn_video = findViewById(R.id.btn_detalleEjercicio_video);
-        btn_editar = findViewById(R.id.btn_detalleEjercicio_editar);
+        //btn_editar = findViewById(R.id.btn_detalleEjercicio_editar);
         //AlertDialog alert = confirmar();
 
 
@@ -79,12 +79,12 @@ public class       DetalleEjercicio extends AppCompatActivity implements Seriali
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(video_ejercicio)));
             }
         });
-        btn_editar.setOnClickListener(new View.OnClickListener() {
+        /*btn_editar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
-        });
+        });*/
 
 
         //rellenarDetalle();

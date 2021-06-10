@@ -8,35 +8,52 @@
     android:background="#FFFFFF"
     tools:context=".LoginActivity">
 
-    <EditText
-        android:id="@+id/txt_login_correo"
-        android:layout_width="match_parent"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/outline_text"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="344dp"
         android:layout_height="wrap_content"
         android:hint="Correo"
-        android:inputType="textEmailAddress"
+        app:errorEnabled="true"
+        app:helperTextEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.467"></EditText>
+        app:layout_constraintVertical_bias="0.458"
+        app:startIconDrawable="@drawable/ic_baseline_alternate_email_24">
 
-    <EditText
-        android:id="@+id/txt_login_contrasena"
-        android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_login_correo"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/outline_text1"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="344dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txt_login_correo"
-        android:layout_marginBottom="24dp"
         android:hint="Contraseña"
-        android:inputType="textPassword"
+        app:errorEnabled="true"
+        app:helperTextEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.678">
+        app:layout_constraintVertical_bias="0.582"
+        app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
-    </EditText>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txt_login_contrasena"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btn_login_ingresar"
@@ -53,7 +70,7 @@
 
     </Button>
 
-    <TextView
+    <!--<TextView
         android:id="@+id/txt_login_olvidoContraseña"
         android:layout_width="237dp"
         android:layout_height="21dp"
@@ -67,13 +84,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.855" />
+        app:layout_constraintVertical_bias="0.855" /> -->
 
     <TextView
         android:id="@+id/txt_login_nuevoUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="64dp"
         android:background="#FFFFFF"
         android:clickable="true"
         android:text="Crear una cuenta nueva"
@@ -81,23 +99,9 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_login_olvidoContraseña"
         app:layout_constraintVertical_bias="0.0" />
-
-    <CheckBox
-        android:id="@+id/check_login_recordar"
-        android:layout_width="185dp"
-        android:layout_height="42dp"
-        android:text="Recuerdame"
-        android:textSize="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.075"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.671" />
 
     <ImageView
         android:id="@+id/img_login_logo"

@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -61,6 +62,7 @@ public class DetalleRutina extends AppCompatActivity {
     private GridView gridView;
     DetalleRutinaAdaptador detalleRutinaAdaptador;
     ArrayList<DetalleEjercicioRutina> detalleEjercicioRutinas;
+    ExtendedFloatingActionButton extendedFloatingActionButton;
 
     FirebaseFirestore bdd;
     Boolean result;
@@ -78,16 +80,15 @@ public class DetalleRutina extends AppCompatActivity {
         ejercicios= new ArrayList<>();
         detalleEjercicioRutinas= new ArrayList<>();
         txt_descripcion = findViewById(R.id.txt_rutina_descripcion);
-        btn_agregarEjercicio = findViewById(R.id.btn_agregar_detalleRutina);
         //btn_eliminar = findViewById(R.id.btn_detalleRutina_eliminar);
         //btn_editar = findViewById(R.id.btn_detalleRutina_editar);
         btn_asignar = findViewById(R.id.btn_detalleRutina_asignar);
         gridView = (GridView) findViewById(R.id.grid_ejericios);
+        extendedFloatingActionButton = findViewById(R.id.fab_detalleRutina);
         //lista = findViewById(R.id.list_detalleRutina);
         //lista_repeticiones = findViewById(R.id.list_detalleRutina_repeticiones);
         //spinnerEjercicios = findViewById(R.id.sp_detalleRutina);
         //itxt_repeticiones = findViewById(R.id.itxt_detalleRutina_repeticiones);
-
         listItem = new ArrayList<>();
         listEjercicios = new ArrayList<>();
         nombres_listview = new ArrayList<>();
@@ -99,7 +100,11 @@ public class DetalleRutina extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
         String correo = prefs.getString("correo", null);
-
+        if(!correo.contains("@admin.cl")){
+            extendedFloatingActionButton.hide();
+        }else{
+            btn_asignar.setVisibility(View.GONE);
+        }
         String nombre_rutina = (String) getIntent().getExtras().get("nombre");
         String descripcion_rutina = (String) getIntent().getExtras().get("descripcion");
         int id_ejercicio=(int) getIntent().getIntExtra("idEjercicio",0);
@@ -112,13 +117,42 @@ public class DetalleRutina extends AppCompatActivity {
         viewData(nombre_rutina);
         //spinner();
 
-
-        btn_agregarEjercicio.setOnClickListener(new View.OnClickListener() {
+        extendedFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetalleRutina.this, AgregarEjercicioARutina.class)
                         .putExtra("nombreRutina", nombre_rutina);
                 startActivity(intent);
+            }
+        });
+
+        btn_asignar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bdd.collection("usuarios").document(correo).collection("rutinaActual")
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.getResult().size()>=1){
+                                    Toast.makeText(DetalleRutina.this, "ya hay una rutina asignada", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    String descripcion = (String) getIntent().getExtras().get("descripcion");
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("rutinaActual", nombre_rutina);
+                                    rutinaActual.set(data, SetOptions.merge());
+                                    startActivity(new Intent(DetalleRutina.this, AgregarRutinaActual.class)
+                                            .putExtra("nombreRutina", nombre_rutina)
+                                            .putExtra("descripcion", descripcion));
+                                    Toast.makeText(DetalleRutina.this, "Rutina Asignada", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("no hay", "otras rutinas asignadas");
+                    }
+                });
             }
         });
 

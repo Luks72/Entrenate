@@ -45,6 +45,7 @@ public class RutinaAdaptador extends BaseAdapter {
     }
     private class ViewHolder{
         TextView nombre;
+        TextView descripcion;
     }
 
     @Override
@@ -56,10 +57,10 @@ public class RutinaAdaptador extends BaseAdapter {
         }
 
         holder.nombre = (TextView) convertView.findViewById(R.id.nombre_rutina);
+        holder.descripcion = convertView.findViewById(R.id.descripcion_rutina);
         Rutina ej = rutinas.get(position);
         holder.nombre.setText(ej.getNombre());
-
-
+        holder.descripcion.setText(ej.getDescripcion());
         return convertView;
     }
 }

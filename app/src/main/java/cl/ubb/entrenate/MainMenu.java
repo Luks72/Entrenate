@@ -1,13 +1,24 @@
 package cl.ubb.entrenate;
 
+import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.anychart.ui.contextmenu.Item;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,10 +28,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+
 public class MainMenu extends AppCompatActivity {
 
+
     private AppBarConfiguration mAppBarConfiguration;
-    FloatingActionButton fab;
+    ImageView imageView;
+    TextView nombre, correo;
+    Button cerrar;
+    String correoUsuario, nombreUsuario, urlUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +44,7 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         //FloatingActionButton fab = findViewById(R.id.fab);
         //fab.setImageResource(R.drawable.ic_baseline_add_24);
         /*fab.setOnClickListener(new View.OnClickListener() {
@@ -47,7 +64,27 @@ public class MainMenu extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        View headerView = navigationView.getHeaderView(0);
+        imageView = headerView.findViewById(R.id.header_image);
+        nombre = headerView.findViewById(R.id.header_nombre);
+        correo = headerView.findViewById(R.id.header_correo);
+
+        SharedPreferences prefs = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+        correoUsuario = prefs.getString("correo", null);
+        nombreUsuario = prefs.getString("nombre", null);
+        urlUsuario = prefs.getString("url", null);
+        while(nombreUsuario==null){
+            correoUsuario = prefs.getString("correo", null);
+            nombreUsuario = prefs.getString("nombre", null);
+            urlUsuario = prefs.getString("url", null);
+        }
+
+        correo.setText(correoUsuario);
+        nombre.setText(nombreUsuario);
+        Picasso.get().load(urlUsuario).into(imageView);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -63,7 +100,16 @@ public class MainMenu extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-   /* public FloatingActionButton getFab(){
-        return fab;
-    }*/
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Toast.makeText(MainMenu.this, "Se ha cerrado la sesión", Toast.LENGTH_SHORT).show();
+                getSharedPreferences("credenciales", 0).edit().clear().commit();
+                startActivity(new Intent(MainMenu.this,LoginActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

@@ -116,6 +116,7 @@ public class AgregarUsuario extends AppCompatActivity {
                                     Map<String, Object> data = new HashMap<>();
                                     data.put("correo", txt_correo.getText().toString());
                                     data.put("creacion", FieldValue.serverTimestamp());
+                                    data.put("nombre", "");
                                     bdd.collection("usuarios").document(txt_correo.getText().toString()).set(data, SetOptions.merge());
                                     Toast.makeText(AgregarUsuario.this, "Agregado", Toast.LENGTH_SHORT).show();
                                     Bundle bundle = new Bundle();

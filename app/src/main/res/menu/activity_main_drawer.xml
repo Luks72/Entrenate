@@ -27,7 +27,7 @@
                 android:top ="150dp"
                 android:id="@+id/nav_perfil"
                 android:icon="@drawable/ic_baseline_supervised_user_circle_24"
-                android:title="Pefil" />
+                android:title="Perfil" />
 
 
         </menu>
