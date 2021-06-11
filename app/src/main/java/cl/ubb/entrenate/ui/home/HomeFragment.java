@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,14 +38,17 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cl.ubb.entrenate.AgregarNuevoUsuarioActivity;
 import cl.ubb.entrenate.AgregarUsuario;
 import cl.ubb.entrenate.DetalleEjercicio;
 import cl.ubb.entrenate.LoginActivity;
@@ -55,6 +59,8 @@ import static android.content.Context.MODE_PRIVATE;
 import static cl.ubb.entrenate.adaptadores.NotificationHelper.CHANNEL_1_ID;
 import static cl.ubb.entrenate.adaptadores.NotificationHelper.CHANNEL_2_ID;
 import cl.ubb.entrenate.adaptadores.NotificationHelper;
+import cl.ubb.entrenate.adaptadores.UsuariosAdaptador;
+import cl.ubb.entrenate.entidades.Usuario;
 
 public class HomeFragment extends Fragment {
 
@@ -65,6 +71,11 @@ public class HomeFragment extends Fragment {
     String nombreRutina, correoUsuario;
     private NotificationManagerCompat notificationManager;
    HorizontalBarChart chart;
+    SharedPreferences prefs;
+    ExtendedFloatingActionButton extendedFloatingActionButton;
+    private GridView gridView;
+    private ArrayList<Usuario> usuarios;
+    private UsuariosAdaptador adaptador;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -74,9 +85,12 @@ public class HomeFragment extends Fragment {
 
         bdd= FirebaseFirestore.getInstance();
 
-        SharedPreferences prefs = this.getActivity().getSharedPreferences("credenciales", MODE_PRIVATE);
+        prefs = this.getActivity().getSharedPreferences("credenciales", MODE_PRIVATE);
         correoUsuario = prefs.getString("correo", null);
 
+        cardView = root.findViewById(R.id.card_home);
+        gridView = root.findViewById(R.id.grid_usuarios);
+        extendedFloatingActionButton = root.findViewById(R.id.fab_usuarios);
         cardView = root.findViewById(R.id.card_home);
         txt_nombre = root.findViewById(R.id.txt_home_nombreRutinaActual);
         chart = root.findViewById(R.id.chart);
@@ -84,6 +98,23 @@ public class HomeFragment extends Fragment {
         notificationManager = NotificationManagerCompat.from(this.getActivity());
         String titulo= "para probar el titulo";
         String desc = "para probar la descripcion";
+
+        if(!correoUsuario.contains("@preparador.cl")){
+            gridView.setVisibility(View.GONE);
+            extendedFloatingActionButton.hide();
+        }else{
+            cardView.setVisibility(View.GONE);
+            usuarios = new ArrayList<>();
+            extendedFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent miIntent= new Intent(getActivity(), AgregarNuevoUsuarioActivity.class);
+                    startActivity(miIntent);
+                }
+            });
+
+            rellenargrid();
+        }
 
         bdd.collection("usuarios").document(correoUsuario).collection("rutinaActual")
                 .get()
@@ -117,6 +148,30 @@ public class HomeFragment extends Fragment {
         BarData data1 = new BarData(set);
         chart.setData(data1);
         return root;
+    }
+
+    private void rellenargrid() {
+        prefs = this.getActivity().getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+        String correo = prefs.getString("correo", null);
+        bdd.collection("preparador").document(correo).collection("usuarios")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                           @Override
+                                           public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                               if (task.isSuccessful()){
+                                                   usuarios.clear();
+                                                   for (QueryDocumentSnapshot documentSnapshots: task.getResult()){
+                                                       usuarios.add(documentSnapshots.toObject(Usuario.class));
+                                                   }
+                                                   adaptador = new UsuariosAdaptador(getActivity(), usuarios);
+                                                   adaptador.notifyDataSetChanged();
+                                                   gridView.setAdapter(adaptador);
+                                               }
+                                           }
+                                       }
+
+                );
+
     }
 
 }

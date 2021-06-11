@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/ejercicio"
+        android:icon="@drawable/ic_baseline_fitness_center_24"
+        android:title="Ejercicios"></item>
+    <item
+        android:id="@+id/clasificacion"
+        android:icon="@drawable/ic_baseline_sort_24"
+        android:title="Clasificación"></item>
+
+
+
+
+
+</menu>

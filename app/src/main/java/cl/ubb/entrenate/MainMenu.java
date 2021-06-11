@@ -20,7 +20,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -37,6 +41,8 @@ public class MainMenu extends AppCompatActivity {
     TextView nombre, correo;
     Button cerrar;
     String correoUsuario, nombreUsuario, urlUsuario;
+    MenuItem item;
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,10 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        prefs = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+        correoUsuario = prefs.getString("correo", null);
+        nombreUsuario = prefs.getString("nombre", null);
+        urlUsuario = prefs.getString("url", null);
 
         //FloatingActionButton fab = findViewById(R.id.fab);
         //fab.setImageResource(R.drawable.ic_baseline_add_24);
@@ -58,9 +68,10 @@ public class MainMenu extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_ejercicios, R.id.nav_rutinas, R.id.nav_perfil)
+                R.id.nav_home, R.id.nav_ejercicios, R.id.nav_rutinas, R.id.nav_perfil, R.id.nav_clasificacion)
                 .setDrawerLayout(drawer)
                 .build();
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -69,15 +80,13 @@ public class MainMenu extends AppCompatActivity {
         nombre = headerView.findViewById(R.id.header_nombre);
         correo = headerView.findViewById(R.id.header_correo);
 
-        SharedPreferences prefs = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
-        correoUsuario = prefs.getString("correo", null);
-        nombreUsuario = prefs.getString("nombre", null);
-        urlUsuario = prefs.getString("url", null);
-        while(nombreUsuario==null){
+        /*while(nombreUsuario==null){
             correoUsuario = prefs.getString("correo", null);
             nombreUsuario = prefs.getString("nombre", null);
             urlUsuario = prefs.getString("url", null);
-        }
+        }*/
+        Log.e("correo Usuario", ""+correoUsuario);
+        Log.e("nombre Usuario", ""+nombreUsuario);
 
         correo.setText(correoUsuario);
         nombre.setText(nombreUsuario);

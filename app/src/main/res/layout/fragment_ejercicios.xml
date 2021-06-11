@@ -59,4 +59,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
+    <io.github.yavski.fabspeeddial.FabSpeedDial
+        android:id="@+id/speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|end"
+        app:fabDrawableTint="@color/design_default_color_primary_dark"
+        app:fabGravity="bottom_end"
+        app:fabMenu="@menu/fab_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:miniFabBackgroundTint="@color/white"
+        app:miniFabTitleTextColor="@color/design_default_color_primary_dark" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

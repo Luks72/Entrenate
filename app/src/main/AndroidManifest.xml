@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Entrenate">
-        <activity android:name=".AgregarEjercicioARutina"></activity>
+        <activity android:name=".AgregarNuevoUsuarioActivity"></activity>
+        <activity android:name=".AgregarEjercicioARutina" />
         <activity android:name=".AgregarRutinaActual" />
         <activity android:name=".AgregarPerfil" />
         <activity android:name=".EditarRutina" />

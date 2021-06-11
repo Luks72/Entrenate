@@ -25,6 +25,11 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import cl.ubb.entrenate.adaptadores.ImagenesAdaptador;
+import cl.ubb.entrenate.entidades.Ejercicios;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -32,11 +37,11 @@ public class LoginActivity extends AppCompatActivity {
     EditText txt_correo, txt_contrasena;
     Button btn_ingresar;
     AdminSQLiteAdminHelper db;
-    CheckBox checkBox;
     FirebaseAuth mAuth;
     androidx.constraintlayout.widget.ConstraintLayout layout;
     FirebaseFirestore bdd;
     DocumentReference usuario;
+    SharedPreferences prefs;
 
 
     @Override
@@ -51,11 +56,9 @@ public class LoginActivity extends AppCompatActivity {
         txt_contrasena =findViewById(R.id.txt_login_contrasena);
         layout =findViewById(R.id.loginLayout);
         bdd=FirebaseFirestore.getInstance();
-
         mAuth = FirebaseAuth.getInstance();
-
+        prefs = getSharedPreferences("credenciales", MODE_PRIVATE);
         session();
-
 
         txt_agregarUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,11 +78,11 @@ public class LoginActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(LoginActivity.this, "Bienvenido", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(LoginActivity.this, MainMenu.class);
-                                    SharedPreferences prefs = getSharedPreferences("credenciales", MODE_PRIVATE);
+                                    //SharedPreferences prefs = getSharedPreferences("credenciales", MODE_PRIVATE);
                                     prefs.edit().putString("correo", txt_correo.getText().toString()).commit();
                                     prefs.edit().putString("contrasena", txt_contrasena.getText().toString()).commit();
-                                    prefs.edit().putString("nombre", "").commit();
-                                    usuario = bdd.collection("usuarios").document(txt_correo.getText().toString());
+                                    buscarPreparador();
+                                    /*usuario = bdd.collection("preparador").document(txt_correo.getText().toString());
                                     usuario.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -88,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 prefs.edit().putString("url",task.getResult().getString("url")).commit();
                                             }
                                         }
-                                    });
+                                    });*/
                                     startActivity(intent);
 
                                 } else {
@@ -117,6 +120,40 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         }
+
+    private void buscarPreparador() {
+        prefs = getSharedPreferences("credenciales", MODE_PRIVATE);
+        bdd.collection("preparador")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                           @Override
+                                           public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                               if (task.isSuccessful()){
+                                                   for (QueryDocumentSnapshot documentSnapshots: task.getResult()) {
+                                                       bdd.collection("preparador").document(documentSnapshots.getString("correo")).collection("usuarios")
+                                                               .get()
+                                                               .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                                          @Override
+                                                                                          public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                                                                                              if (task1.isSuccessful()){
+                                                                                                  for (QueryDocumentSnapshot documentSnapshots1: task1.getResult()) {
+                                                                                                      if(documentSnapshots1.getString("correo").equals(txt_correo.getText().toString())){
+                                                                                                          prefs.edit().putString("correoPreparador", documentSnapshots1.getString("correoPreparador")).commit();
+                                                                                                          prefs.edit().putString("nombre", documentSnapshots1.getString("nombre")).commit();
+
+                                                                                                      }
+                                                                                                  }
+                                                                                              }
+                                                                                          }
+                                                                                      }
+                                                               );
+                                                   }
+                                               }
+                                           }
+                                       }
+
+                );
+    }
 
     private void session() {
         SharedPreferences prefs = getSharedPreferences("credenciales", Context.MODE_PRIVATE);

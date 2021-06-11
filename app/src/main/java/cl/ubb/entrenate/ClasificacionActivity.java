@@ -3,6 +3,7 @@ package cl.ubb.entrenate;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,8 +41,9 @@ public class ClasificacionActivity extends AppCompatActivity {
 
     ArrayList <String> listItem;
     ArrayAdapter adapter;
-
+    String correoUsuario;
     FirebaseFirestore bdd;
+    SharedPreferences prefs;
     CollectionReference ref;
 
 
@@ -48,18 +51,17 @@ public class ClasificacionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clasificacion);
-
+        bdd=FirebaseFirestore.getInstance();
         db = new AdminSQLiteAdminHelper(this, "entrenate_bdd", null,1);
         listItem = new ArrayList<>();
 
-        bdd=FirebaseFirestore.getInstance();
+        prefs = getSharedPreferences("credenciales", MODE_PRIVATE);
+        correoUsuario = prefs.getString("correo", null);
+
 
         agregar= findViewById(R.id.btn_clasificacion_agregar);
         nombre= findViewById(R.id.txt_clasificacion_nombre);
         listViewClasifiacion= findViewById(R.id.list_clasificacion);
-
-
-        viewData();
 
         listViewClasifiacion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -72,50 +74,16 @@ public class ClasificacionActivity extends AppCompatActivity {
 
     }
 
-    private void viewData() {
-        /*Cursor cursor = db.ver_clasificacion();
-        if (cursor.getCount()== 0 ){
-            Toast.makeText(this, "No hay clasificacion agregadas", Toast.LENGTH_SHORT).show();
-        }else{
-            while (cursor.moveToNext()){
-                listItem.add(cursor.getString(1));
-            }
-            adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItem);
-            listViewClasifiacion.setAdapter(adapter);
-        }*/
-
-        bdd.collection("clasificacion")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            listItem.clear();
-                            for (QueryDocumentSnapshot documentSnapshots: task.getResult()){
-                                listItem.add(documentSnapshots.getString("nombre"));
-                                Log.e("nombre", documentSnapshots.getString("nombre"));
-                            }
-                            adapter = new ArrayAdapter<String>(ClasificacionActivity.this, android.R.layout.simple_list_item_1, listItem);
-                            adapter.notifyDataSetChanged();
-                            listViewClasifiacion.setAdapter(adapter);
-                        }
-                    }
-                }
-
-                );
-
-    }
-
     public void onClick (View view){
         if(!nombre.getText().toString().isEmpty()){
             Map<String, Object> data = new HashMap<>();
             data.put("nombre", nombre.getText().toString());
-            bdd.collection("clasificacion").document(nombre.getText().toString()).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+            bdd.collection("preparador").document(correoUsuario).collection("clasificacion").document(nombre.getText().toString()).set(data, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Toast.makeText(ClasificacionActivity.this, "Agregado exitosamente", Toast.LENGTH_SHORT).show();
                     nombre.setText("");
-                    adapter.notifyDataSetChanged();
+                    finish();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -128,15 +96,5 @@ public class ClasificacionActivity extends AppCompatActivity {
         }else{
             Toast.makeText(ClasificacionActivity.this, "El campo no puede estar vacío", Toast.LENGTH_SHORT).show();
         }
-
-
-
-
-
     }
-
-
-
-
-
 }

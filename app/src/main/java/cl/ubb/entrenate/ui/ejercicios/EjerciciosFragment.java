@@ -14,6 +14,7 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,6 +38,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.internal.NavigationMenu;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -55,6 +57,7 @@ import cl.ubb.entrenate.MainMenu;
 import cl.ubb.entrenate.R;
 import cl.ubb.entrenate.adaptadores.ImagenesAdaptador;
 import cl.ubb.entrenate.entidades.Ejercicios;
+import io.github.yavski.fabspeeddial.FabSpeedDial;
 
 public class EjerciciosFragment extends Fragment implements Serializable{
 
@@ -70,6 +73,7 @@ public class EjerciciosFragment extends Fragment implements Serializable{
     ArrayList<String> listEjercicios;
     ArrayAdapter adapterEjercicios;
     ExtendedFloatingActionButton extendedFloatingActionButton;
+    FabSpeedDial fabSpeedDial;
 
     FirebaseFirestore bdd;
 
@@ -86,6 +90,7 @@ public class EjerciciosFragment extends Fragment implements Serializable{
         ejercicios= new ArrayList<>();
         gridView = (GridView) root.findViewById(R.id.grid);
         refreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.refresh);
+        fabSpeedDial = root.findViewById(R.id.speed);
         listEjercicios = new ArrayList<>();
         vacio = (TextView) root.findViewById(R.id.vacio);
         extendedFloatingActionButton = (ExtendedFloatingActionButton) root.findViewById(R.id.fab_ejercicios);
@@ -148,6 +153,30 @@ public class EjerciciosFragment extends Fragment implements Serializable{
             public void onClick(View v) {
                 Intent miIntent= new Intent(getActivity(), AgregarEjerciciosActivity.class);
                 startActivity(miIntent);
+            }
+        });
+        fabSpeedDial.setMenuListener(new FabSpeedDial.MenuListener() {
+            @Override
+            public boolean onPrepareMenu(NavigationMenu navigationMenu) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemSelected(MenuItem menuItem) {
+                if(menuItem.getTitle().equals("Ejercicios")){
+                    Intent miIntent= new Intent(getActivity(), AgregarEjerciciosActivity.class);
+                    startActivity(miIntent);
+                }
+                if(menuItem.getTitle().equals("Clasificación")){
+                    Intent miIntent= new Intent(getActivity(), ClasificacionActivity.class);
+                    startActivity(miIntent);
+                }
+                return true;
+            }
+
+            @Override
+            public void onMenuClosed() {
+
             }
         });
 
