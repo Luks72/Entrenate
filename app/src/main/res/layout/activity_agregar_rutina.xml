@@ -6,70 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".AgregarRutinaActivity">
 
-
-    <!-- <GridView
-        android:id="@+id/gv_agregarRutina_ejercicios"
-        android:layout_width="413dp"
-        android:layout_height="405dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.617" >
-        </GridView>
- -->
-
-    <EditText
-        android:id="@+id/itxt_agregarRutina_nombre"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="344dp"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:hint="Nombre rutina"
-        android:inputType="textPersonName"
+        app:errorEnabled="true"
+        app:helperTextEnabled="true"
+        app:helperText="El nombre no podrá ser cambiado posteriormente"
+        app:helperTextTextColor="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.257" />
+        app:layout_constraintVertical_bias="0.102"
+        app:startIconDrawable="@drawable/ic_baseline_add_24">
 
-    <!-- <Button
-        android:id="@+id/btn_agregarrutina_ejercicios"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onClick"
-        android:text="Agregar Ejercicios"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.186" />
-        -->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/itxt_agregarRutina_nombre"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/btn_agregarRutina_aceptar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Aceptar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.325"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.929" />
-
-    <Button
-        android:id="@+id/btn_agregarRutina_cancelar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onClickCancelar"
-        android:text="Cancelar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.754"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.927" />
 
     <!-- <TextView
         android:id="@+id/vacio_agregarrutina"
@@ -79,58 +40,100 @@
         android:visibility="gone" />
 
     -->
-    <EditText
-        android:id="@+id/itxt_agregarRutina_desc"
+
+    <Button
+        android:id="@+id/btn_agregarRutina_aceptar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Descripcion"
-        android:inputType="textPersonName"
+        android:text="Agregar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.762"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.387" />
+        app:layout_constraintVertical_bias="0.915" />
 
-    <EditText
-        android:id="@+id/inumber_agregarRutina_vecesxsemana"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+        android:hint="Descripción"
+        app:errorEnabled="true"
+        app:helperTextEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.277"
+        app:startIconDrawable="@drawable/ic_baseline_description_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/itxt_agregarRutina_desc"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+        android:hint="Veces por semana"
+        app:helperText="Cantidad de veces que se debe realizar esta rutina a la semana"
+        app:errorEnabled="true"
+        app:helperTextEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.448"
+        app:startIconDrawable="@drawable/ic_baseline_av_timer_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inumber_agregarRutina_vecesxsemana"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+        android:hint="Duración"
+        app:errorEnabled="true"
+        app:helperText="Cantidad de semanas que dura la rutina"
+        app:helperTextEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.621"
+        app:startIconDrawable="@drawable/ic_baseline_date_range_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inumber_agregarRutina_duracion"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_agregarRutina_cancelar"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint=" "
-        android:inputType="number"
+        android:text="CANCELAR"
+        android:textColor="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.248"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.592" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Veces por semana"
-        android:textSize="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.526" />
-
-    <!--
-
-    <fragment
-        android:id="@+id/fragment3"
-        android:name="cl.ubb.entrenate.BlankFragment"
-        android:layout_width="350dp"
-        android:layout_height="574dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-        -->
+        app:layout_constraintVertical_bias="0.917" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

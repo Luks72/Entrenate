@@ -81,9 +81,6 @@ public class AgregarRutinaActual extends AppCompatActivity {
             }
         };
 
-
-
-
         btn_agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

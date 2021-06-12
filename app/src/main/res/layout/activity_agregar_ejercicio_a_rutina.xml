@@ -16,117 +16,122 @@
         tools:layout_editor_absoluteX="16dp"
         android:scrollbarSize="18dp"/>
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="344dp"
         android:layout_height="wrap_content"
-        android:text="Series"
-        android:textSize="18dp"
+        android:hint="Series"
+        app:errorEnabled="true"
+        app:helperText="Numero de series"
+        app:helperTextEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.129" />
+        app:layout_constraintVertical_bias="0.156"
+        app:startIconDrawable="@drawable/ic_baseline_home_repair_service_24">
 
-    <EditText
-        android:id="@+id/itxt_agregarEjercicioARutina_series"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="N° de series"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.212" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/itxt_agregarEjercicioARutina_series"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="344dp"
         android:layout_height="wrap_content"
-        android:text="Repeticiones"
-        android:textSize="18dp"
+        android:hint="Series"
+        app:errorEnabled="true"
+        app:helperText="Numero de repeticiones por cada serie"
+        app:helperTextEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.311" />
+        app:layout_constraintVertical_bias="0.33"
+        app:startIconDrawable="@drawable/ic_baseline_repeat_24">
 
-    <EditText
-        android:id="@+id/itxt_agregarEjercicioARutina_repeticiones"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="repeticiones x serie"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.382" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/itxt_agregarEjercicioARutina_repeticiones"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:inputType="number" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
+    <!-- <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="344dp"
         android:layout_height="wrap_content"
-        android:text="Descanso"
-        android:textSize="18dp"
+        android:hint="Instrucciones"
+        app:errorEnabled="true"
+        app:helperText="Instrucciones generales sobre la realización de este ejercicio"
+        app:helperTextEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.474" />
+        app:layout_constraintVertical_bias="0.7"
+        app:startIconDrawable="@drawable/ic_baseline_description_24">
 
-    <EditText
-        android:id="@+id/itxt_agregarEjercicioARutina_descanso"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="x minutos"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.558" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/itxt_agregarEjercicioARutina_instrucciones"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout> -->
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="344dp"
         android:layout_height="wrap_content"
-        android:text="Instrucciones"
-        android:textSize="18dp"
+        android:hint="Descanso"
+        app:errorEnabled="true"
+        app:helperText="Tiempo de descanso entre series.                            Ejemplo: 1:30 minutos"
+        app:helperTextEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.644" />
+        app:layout_constraintVertical_bias="0.533"
+        app:startIconDrawable="@drawable/ic_baseline_timer_24">
 
-    <EditText
-        android:id="@+id/itxt_agregarEjercicioARutina_instrucciones"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.733" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/itxt_agregarEjercicioARutina_descanso"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btn_agregarEjercicioARutina_agregar"
-        android:layout_width="93dp"
-        android:layout_height="37dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Agregar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.525"
+        app:layout_constraintHorizontal_bias="0.762"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.911" />
+        app:layout_constraintVertical_bias="0.915" />
+
+    <Button
+        android:id="@+id/btn_agregarEjercicioARutina_cancelar"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CANCELAR"
+        android:textColor="@color/red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.273"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.913" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

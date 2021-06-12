@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1050352358104",
+    "project_id": "entrenate-ubb-2021",
+    "storage_bucket": "entrenate-ubb-2021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050352358104:android:acbe3a7b1f21a9b3cb3dad",
+        "android_client_info": {
+          "package_name": "cl.ubb.entrenate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1050352358104-l2dc21r1vkvfkk1l2a9bijdsds1oavda.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCr9K5KADKveDvLibEdnoUFHKnv3b4c3XU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1050352358104-l2dc21r1vkvfkk1l2a9bijdsds1oavda.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

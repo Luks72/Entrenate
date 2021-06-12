@@ -79,6 +79,11 @@ public class RutinasFragment extends Fragment {
             floatingActionButton.hide();
         }
 
+        if(!correo.contains("@preparador.cl")){
+            String correoPreparador = prefs.getString("correoPreparador", null);
+            correo = correoPreparador;
+        }
+
 
         rellenarGrid(correo);
 

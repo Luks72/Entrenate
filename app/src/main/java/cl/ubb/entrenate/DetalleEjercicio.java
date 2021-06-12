@@ -36,7 +36,7 @@ import java.io.Serializable;
 import cl.ubb.entrenate.entidades.Ejercicios;
 import cl.ubb.entrenate.ui.ejercicios.EjerciciosFragment;
 
-public class       DetalleEjercicio extends AppCompatActivity implements Serializable {
+public class      DetalleEjercicio extends AppCompatActivity implements Serializable {
 
     private static final String TAG = "MENSAJE";
     private ImageView img_foto;
@@ -64,7 +64,13 @@ public class       DetalleEjercicio extends AppCompatActivity implements Seriali
         btn_editar = findViewById(R.id.btn_detalleEjercicio_editar);
         bdd= FirebaseFirestore.getInstance();
         AlertDialog alert = confirmar();
+        SharedPreferences prefs = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+        String correo = prefs.getString("correo", null);
 
+        if(!correo.contains("@preparador.cl")){
+            btn_editar.setVisibility(View.GONE);
+            btn_eliminar.setVisibility(View.GONE);
+        }
 
         nombre_ejercicio = (String) getIntent().getExtras().get("nombre");
         String video_ejercicio = (String) getIntent().getExtras().get("video");

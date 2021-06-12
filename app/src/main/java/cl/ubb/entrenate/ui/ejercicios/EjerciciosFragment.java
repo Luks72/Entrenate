@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -110,6 +111,7 @@ public class EjerciciosFragment extends Fragment implements Serializable{
 
         spinnerClasificacion = root.findViewById(R.id.spn_ejercicios);
         //rellenarSpinner();
+        registerForContextMenu(gridView);
 
         rellenarspinner(correo);
 
