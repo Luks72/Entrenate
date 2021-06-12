@@ -72,8 +72,8 @@ public class EjerciciosFragment extends Fragment implements Serializable{
     Spinner spinnerClasificacion;
     ArrayList<String> listEjercicios;
     ArrayAdapter adapterEjercicios;
-    ExtendedFloatingActionButton extendedFloatingActionButton;
     FabSpeedDial fabSpeedDial;
+    SharedPreferences prefs;
 
     FirebaseFirestore bdd;
 
@@ -93,13 +93,16 @@ public class EjerciciosFragment extends Fragment implements Serializable{
         fabSpeedDial = root.findViewById(R.id.speed);
         listEjercicios = new ArrayList<>();
         vacio = (TextView) root.findViewById(R.id.vacio);
-        extendedFloatingActionButton = (ExtendedFloatingActionButton) root.findViewById(R.id.fab_ejercicios);
 
-        SharedPreferences prefs = this.getActivity().getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+        prefs = this.getActivity().getSharedPreferences("credenciales", Context.MODE_PRIVATE);
         String correo = prefs.getString("correo", null);
-        if(!correo.contains("@admin.cl")){
-            extendedFloatingActionButton.hide();
-            Log.e("logeado", "ud usuario se ha logeado");
+        if(!correo.contains("@preparador.cl")){
+            fabSpeedDial.setVisibility(View.GONE);
+        }
+
+        if(!correo.contains("@preparador.cl")){
+            String correoPreparador = prefs.getString("correoPreparador", null);
+            correo = correoPreparador;
         }
 
         vacio.setVisibility(View.VISIBLE);
@@ -108,14 +111,8 @@ public class EjerciciosFragment extends Fragment implements Serializable{
         spinnerClasificacion = root.findViewById(R.id.spn_ejercicios);
         //rellenarSpinner();
 
-        rellenarspinner();
+        rellenarspinner(correo);
 
-
-         //**cambiar ícono del botón flotante**
-
-        /*FloatingActionButton floatingActionButton = ((MainMenu) getActivity()).getFab();
-        floatingActionButton.setImageResource(R.drawable.ic_baseline_add_24);
-        floatingActionButton.show();*/
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -148,13 +145,6 @@ public class EjerciciosFragment extends Fragment implements Serializable{
             }
         });
 
-        extendedFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent miIntent= new Intent(getActivity(), AgregarEjerciciosActivity.class);
-                startActivity(miIntent);
-            }
-        });
         fabSpeedDial.setMenuListener(new FabSpeedDial.MenuListener() {
             @Override
             public boolean onPrepareMenu(NavigationMenu navigationMenu) {
@@ -164,7 +154,8 @@ public class EjerciciosFragment extends Fragment implements Serializable{
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {
                 if(menuItem.getTitle().equals("Ejercicios")){
-                    Intent miIntent= new Intent(getActivity(), AgregarEjerciciosActivity.class);
+                    Intent miIntent= new Intent(getActivity(), AgregarEjerciciosActivity.class)
+                            .putExtra("nombre", "");
                     startActivity(miIntent);
                 }
                 if(menuItem.getTitle().equals("Clasificación")){
@@ -183,58 +174,9 @@ public class EjerciciosFragment extends Fragment implements Serializable{
         return root;
     }
 
-    /*private void rellenarSpinner() {
-        bdd.collection("clasificacion")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                           @Override
-                                           public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                               if (task.isSuccessful()){
-                                                   listEjercicios.clear();
-                                                   for (QueryDocumentSnapshot documentSnapshots: task.getResult()){
-                                                       listEjercicios.add(documentSnapshots.getString("nombre"));
-                                                   }
-                                                   adapterEjercicios = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, listEjercicios){
-                                                       @Override
-                                                       public boolean isEnabled(int position){
-                                                           if (position == 0) {
-                                                               return false;
-                                                           } else {
-                                                               return true;
-                                                           }
-                                                       }
-                                                   };
-                                                   spinnerClasificacion.setAdapter(adapterEjercicios);
-                                                   spinnerClasificacion.setSelection(0);
-                                               }
-                                           }
-                                       }
+    private void rellenarspinner(String correo) {
 
-                );
-
-    }*/
-
-
-    private void rellenarspinner() {
-        /*Cursor cursor = db.ver_ejercicios();
-        if (cursor.getCount()== 0 ){
-            Toast.makeText(getActivity(), "No hay ejercicios para mostrar, puedes agregar presionando en el botón +", Toast.LENGTH_LONG).show();
-        }else{
-            while (cursor.moveToNext()){
-                int id = cursor.getInt(0);
-                String nombre = cursor.getString(1);
-                String desc = cursor.getString(2);
-                byte[] image = cursor.getBlob(3);
-                String video = cursor.getString(4);
-                int id_clasificacion = cursor.getInt(5);
-                ejercicios.add(new Ejercicios(id, nombre, desc, image, video, id_clasificacion));
-
-            }
-            adaptador = new ImagenesAdaptador(getActivity(), ejercicios);
-            gridView.setAdapter(adaptador);
-        }*/
-
-        bdd.collection("clasificacion")
+        bdd.collection("preparador").document(correo).collection("clasificacion")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                            @Override
@@ -260,12 +202,10 @@ public class EjerciciosFragment extends Fragment implements Serializable{
                                                        @Override
                                                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                                            if (position == 0) {
-                                                               todos();
+                                                               todos(correo);
                                                            } else {
-                                                               rellenarGridejercicios(spinnerClasificacion.getSelectedItem().toString());
+                                                               rellenarGridejercicios(spinnerClasificacion.getSelectedItem().toString(), correo);
                                                            }
-
-
 
                                                        }
 
@@ -286,9 +226,9 @@ public class EjerciciosFragment extends Fragment implements Serializable{
     }
 
 
-    public void rellenarGridejercicios(String selected){
+    public void rellenarGridejercicios(String selected, String correo){
 
-        bdd.collection("clasificacion").document(selected).collection("ejercicios")
+        bdd.collection("preparador").document(correo).collection("clasificacion").document(selected).collection("ejercicios")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                            @Override
@@ -296,16 +236,6 @@ public class EjerciciosFragment extends Fragment implements Serializable{
                                                if (task.isSuccessful()){
                                                    ejercicios.clear();
                                                    for (QueryDocumentSnapshot documentSnapshots: task.getResult()){
-                                                       /*ejercicios.add(documentSnapshots.getString("nombre"));
-                                                       ejercicios.add(documentSnapshots.getString("desc"));
-                                                       ejercicios.add(documentSnapshots.getString("img"));
-                                                       ejercicios.add(documentSnapshots.getString("vid"));
-                                                       ejercicios.add(documentSnapshots.getString("url"));
-                                                       Log.e("nombre", documentSnapshots.getString("nombre"));
-                                                       Log.e("descripcion", documentSnapshots.getString("desc"));
-                                                       Log.e("img", documentSnapshots.getString("img"));
-                                                       Log.e("vid", documentSnapshots.getString("vid"));
-                                                       Log.e("url", documentSnapshots.getString("url"));*/
                                                        ejercicios.add(documentSnapshots.toObject(Ejercicios.class));
                                                    }
 
@@ -318,8 +248,8 @@ public class EjerciciosFragment extends Fragment implements Serializable{
 
                 );
     }
-    public void todos(){
-        bdd.collection("clasificacion")
+    public void todos(String correo){
+        bdd.collection("preparador").document(correo).collection("clasificacion")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                            @Override
@@ -327,7 +257,7 @@ public class EjerciciosFragment extends Fragment implements Serializable{
                                                if (task.isSuccessful()){
                                                    for (QueryDocumentSnapshot documentSnapshots: task.getResult()) {
                                                        //Log.e("Nombre clasificacion", documentSnapshots.getString("nombre"));
-                                                       bdd.collection("clasificacion").document(documentSnapshots.getString("nombre")).collection("ejercicios")
+                                                       bdd.collection("preparador").document(correo).collection("clasificacion").document(documentSnapshots.getString("nombre")).collection("ejercicios")
                                                                .get()
                                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                                                           @Override

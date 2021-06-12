@@ -8,14 +8,15 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_home" />
-        <item
+        <!--<item
             android:id="@+id/nav_clasificacion"
             android:icon="@drawable/ic_baseline_sort_24"
-            android:title="Clasificacion" />
+            android:title="Clasificacion" />-->
         <item
             android:id="@+id/nav_ejercicios"
             android:icon="@drawable/ic_baseline_fitness_center_24"
             android:title="@string/menu_ejercicios" />
+
         <item
             android:id="@+id/nav_rutinas"
             android:icon="@drawable/ic_baseline_calendar_today_24"

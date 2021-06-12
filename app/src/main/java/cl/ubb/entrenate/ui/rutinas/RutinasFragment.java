@@ -1,6 +1,8 @@
 package cl.ubb.entrenate.ui.rutinas;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +24,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -29,6 +32,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import cl.ubb.entrenate.AdminSQLiteAdminHelper;
+import cl.ubb.entrenate.AgregarEjerciciosActivity;
+import cl.ubb.entrenate.AgregarRutinaActivity;
 import cl.ubb.entrenate.DetalleEjercicio;
 import cl.ubb.entrenate.DetalleRutina;
 import cl.ubb.entrenate.R;
@@ -47,6 +52,8 @@ public class RutinasFragment extends Fragment {
     private ArrayList<Rutina> rutinas;
     private RutinaAdaptador adaptador;
     SwipeRefreshLayout refreshLayout;
+    SharedPreferences prefs;
+    FloatingActionButton floatingActionButton;
 
     FirebaseFirestore bdd;
 
@@ -59,15 +66,21 @@ public class RutinasFragment extends Fragment {
         bdd= FirebaseFirestore.getInstance();
 
         refreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.refresh_rutina);
-
+        floatingActionButton =  root.findViewById(R.id.floating_agregarRutina);
+        prefs = this.getActivity().getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+        String correo = prefs.getString("correo", null);
         rutinas= new ArrayList<>();
         gridView = (GridView) root.findViewById(R.id.grid_rutina);
         vacio = (TextView) root.findViewById(R.id.vacio_rutina);
         vacio.setVisibility(View.VISIBLE);
         gridView.setEmptyView(vacio);
 
+        if(!correo.contains("@preparador.cl")){
+            floatingActionButton.hide();
+        }
 
-        rellenarGrid();
+
+        rellenarGrid(correo);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -96,30 +109,21 @@ public class RutinasFragment extends Fragment {
             }
         });
 
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent miIntent= new Intent(getActivity(), AgregarRutinaActivity.class);
+                startActivity(miIntent);
+            }
+        });
+
         return root;
 
 
     }
 
-    private void rellenarGrid() {
-        /*Cursor cursor = db.ver_rutinas();
-        if (cursor.getCount()== 0 ){
-            Toast.makeText(getActivity(), "No hay rutinas para mostrar, puedes agregar presionando en el botón +", Toast.LENGTH_LONG).show();
-        }else{
-            while (cursor.moveToNext()){
-                int id = cursor.getInt(0);
-                String nombre = cursor.getString(1);
-                String desc = cursor.getString(2);
-                int idEjercicio = cursor.getInt(3);
-                int vxs = cursor.getInt(4);
-                rutinas.add(new Rutina(id, nombre, desc, idEjercicio, vxs));
-            }
-            adaptador = new RutinaAdaptador(getActivity(), rutinas);
-            gridView.setAdapter(adaptador);
-        }
-    }*/
-
-        bdd.collection("rutinas")
+    private void rellenarGrid(String correo) {
+        bdd.collection("preparador").document(correo).collection("rutinas")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                            @Override

@@ -75,10 +75,10 @@ public class MainMenu extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        View headerView = navigationView.getHeaderView(0);
-        imageView = headerView.findViewById(R.id.header_image);
-        nombre = headerView.findViewById(R.id.header_nombre);
-        correo = headerView.findViewById(R.id.header_correo);
+        //View headerView = navigationView.getHeaderView(0);
+        //imageView = headerView.findViewById(R.id.header_image);
+        //nombre = headerView.findViewById(R.id.header_nombre);
+        //correo = headerView.findViewById(R.id.header_correo);
 
         /*while(nombreUsuario==null){
             correoUsuario = prefs.getString("correo", null);
@@ -88,9 +88,9 @@ public class MainMenu extends AppCompatActivity {
         Log.e("correo Usuario", ""+correoUsuario);
         Log.e("nombre Usuario", ""+nombreUsuario);
 
-        correo.setText(correoUsuario);
-        nombre.setText(nombreUsuario);
-        Picasso.get().load(urlUsuario).into(imageView);
+        //correo.setText(correoUsuario);
+        //nombre.setText(nombreUsuario);
+        //Picasso.get().load(urlUsuario).into(imageView);
     }
 
 

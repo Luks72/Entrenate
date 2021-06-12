@@ -61,40 +61,43 @@ public class ClasificacionActivity extends AppCompatActivity {
 
         agregar= findViewById(R.id.btn_clasificacion_agregar);
         nombre= findViewById(R.id.txt_clasificacion_nombre);
-        listViewClasifiacion= findViewById(R.id.list_clasificacion);
 
-        listViewClasifiacion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*listViewClasifiacion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String text= listViewClasifiacion.getItemAtPosition(position).toString();
                 Toast.makeText(ClasificacionActivity.this, ""+text, Toast.LENGTH_SHORT).show();
 
             }
+        });*/
+
+        agregar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!nombre.getText().toString().isEmpty()){
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("nombre", nombre.getText().toString());
+                    bdd.collection("preparador").document(correoUsuario).collection("clasificacion").document(nombre.getText().toString()).set(data, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(ClasificacionActivity.this, "Agregado exitosamente", Toast.LENGTH_SHORT).show();
+                            nombre.setText("");
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(ClasificacionActivity.this, "Ha ocurrido un problema", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ClasificacionActivity.this, "Vuelta a ingresar el nombre", Toast.LENGTH_SHORT).show();
+                            nombre.setText("");
+                        }
+                    });
+                }else{
+                    nombre.setError("El campo no puede estar vacío");
+                }
+            }
         });
 
     }
 
-    public void onClick (View view){
-        if(!nombre.getText().toString().isEmpty()){
-            Map<String, Object> data = new HashMap<>();
-            data.put("nombre", nombre.getText().toString());
-            bdd.collection("preparador").document(correoUsuario).collection("clasificacion").document(nombre.getText().toString()).set(data, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Toast.makeText(ClasificacionActivity.this, "Agregado exitosamente", Toast.LENGTH_SHORT).show();
-                    nombre.setText("");
-                    finish();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(ClasificacionActivity.this, "Ha ocurrido un problema", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(ClasificacionActivity.this, "Vuelta a ingresar el nombre", Toast.LENGTH_SHORT).show();
-                    nombre.setText("");
-                }
-            });
-        }else{
-            Toast.makeText(ClasificacionActivity.this, "El campo no puede estar vacío", Toast.LENGTH_SHORT).show();
-        }
-    }
 }

@@ -43,11 +43,7 @@ public class AgregarRutinaActivity extends AppCompatActivity {
    private ListadoNombreEjerciciosAdaptador adaptador;
    int i=0;
    ListadoEjercicios array;
-
-    FirebaseFirestore bdd;
-
-
-
+   FirebaseFirestore bdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +64,6 @@ public class AgregarRutinaActivity extends AppCompatActivity {
         btn_aceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*String nombre = nombre_rutina.getText().toString();
-                String desc = desc_rutina.getText().toString();
-                String vxs = vxs_rutina.getText().toString();
-                int i = Integer.parseInt(vxs);
-                db.agregar_rutina(nombre, desc, i);
-                nombre_rutina.setText("");
-                desc_rutina.setText("");
-                vxs_rutina.setText("");*/
-                //Toast.makeText(AgregarRutinaActivity.this, "Rutina agregada", Toast.LENGTH_SHORT).show();
                 if(!nombre_rutina.getText().toString().isEmpty()
                         && !desc_rutina.getText().toString().isEmpty()
                             && !vxs_rutina.getText().toString().isEmpty())

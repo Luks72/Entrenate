@@ -1,9 +1,13 @@
 package cl.ubb.entrenate;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,6 +31,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.Blob;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -34,6 +39,7 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -41,7 +47,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import cl.ubb.entrenate.adaptadores.ImagenesAdaptador;
 import cl.ubb.entrenate.entidades.Clasificacion;
+import cl.ubb.entrenate.entidades.Ejercicios;
 import cl.ubb.entrenate.ui.ejercicios.EjerciciosFragment;
 
 public class AgregarEjerciciosActivity extends AppCompatActivity {
@@ -49,7 +57,7 @@ public class AgregarEjerciciosActivity extends AppCompatActivity {
     private static final String TAG=  "Mensaje" ;
     AdminSQLiteAdminHelper db;
 
-    Button agregar, imagen;
+    Button agregar, cancelar;
     EditText nombre, descripcion, video;
 
     ArrayList<String> listClasificacion, listEjercicios;
@@ -57,7 +65,7 @@ public class AgregarEjerciciosActivity extends AppCompatActivity {
 
     ListView listViewClasificacion, listViewEjercicios;
     Spinner spinnerClasificacion;
-
+    boolean ImagenSeleccionada=false, imagencambiada=false;
     ImageView imgView;
 
     private static int RESULT_LOAD_IMAGE = 1;
@@ -68,6 +76,7 @@ public class AgregarEjerciciosActivity extends AppCompatActivity {
     DocumentReference nuevoEjercicio;
     Uri downloadUri;
     Map<String, Object> data1 = new HashMap<>();
+    String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,112 +89,185 @@ public class AgregarEjerciciosActivity extends AppCompatActivity {
         listClasificacion = new ArrayList<>();
         listEjercicios = new ArrayList<>();
 
+
         bdd=FirebaseFirestore.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
 
+        SharedPreferences prefs = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+        String correo = prefs.getString("correo", null);
 
-
-        imagen= findViewById(R.id.btn_agregarEjercicios_imagen);
         imgView= findViewById(R.id.img_agregarEjercicios_imagen);
         agregar= findViewById(R.id.btn_agregarEjercicios_agregar);
+        cancelar= findViewById(R.id.btn_agregarEjercicios_cancelar);
         nombre= findViewById(R.id.txt_agregarEjercicio_nombre);
         descripcion= findViewById(R.id.txt_agregarEjercicio_descripcion);
         video= findViewById(R.id.txt_agregarEjercicio_video);
         spinnerClasificacion = findViewById(R.id.spn_agregarEjercicios_clasificacion);
-        spinnerClasificacion();
+        AlertDialog alert = confirmar();
+        spinnerClasificacion(correo);
         setTitle("Agregar Ejercicios");
 
-        imagen.setOnClickListener(new View.OnClickListener() {
+        if(!getIntent().getExtras().get("nombre").equals("")){
+            String nombre_ejercicio = (String) getIntent().getExtras().get("nombre");
+            Log.e("intent", ""+getIntent().getExtras().get("nombre"));
+            buscarEjercicio(nombre_ejercicio, correo);
+        }
+
+        imgView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Intent i = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
+                if(!getIntent().getExtras().get("nombre").equals("")){
+                    alert.show();
+                }else{
+                    Intent i = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(i, RESULT_LOAD_IMAGE);
+                }
+
             }
         });
 
-    }
-
-    public void onClick (View view) {
-        //Pasar imagen que está en el ImageView a arreglo de bytes para guardarlo en la BDD
-        BitmapDrawable drawable = (BitmapDrawable) imgView.getDrawable();
-        Bitmap b = drawable.getBitmap();
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        b.compress(Bitmap.CompressFormat.PNG, 80, bos);
-        byte[] img = bos.toByteArray();
-
-        Object position =  spinnerClasificacion.getSelectedItem().toString();
-        String name=nombre.getText().toString();
-        String desc=descripcion.getText().toString();
-        String vid=video.getText().toString();
-        Map<String, Object> data = new HashMap<>();
-        data.put("nombre", nombre.getText().toString());
-        data.put("descripcion", descripcion.getText().toString());
-        data.put("NombreClasificacion", spinnerClasificacion.getSelectedItem().toString());
-        //data.put("img", img.toString());
-        data.put("video", video.getText().toString());
-        data.put("url", "");
-
-        /*Intent downloadIntent = new Intent(this, EjerciciosFragment.class)
-                .putExtra("nombre spinner");*/
-
-        nuevoEjercicio = bdd.collection("clasificacion").document(spinnerClasificacion.getSelectedItem().toString()).collection("ejercicios").document(nombre.getText().toString());
-
-        nuevoEjercicio.set(data);
-        nuevoEjercicio.update("url", downloadUri.toString());
-        finish();
-
-        //db.agregar_ejercicios(name, desc, position, img, vid);
-        nombre.setText("");
-        descripcion.setText("");
-        video.setText("");
-        imgView.setImageResource(android.R.color.transparent);
-        //Hacer un Toast según el resultado, puedo poner uno que diga que no se pudo agregar el atributo
-        //Funciona como exception
-        Toast.makeText(AgregarEjerciciosActivity.this, "Ejercicio agregado", Toast.LENGTH_SHORT).show();
-    }
-
-    /*public void listaClasificacion() {
-        Cursor cursor = db.prueba_innerJoin();
-        if (cursor.getCount() == 0) {
-            Toast.makeText(this, "No hay Ejercicios", Toast.LENGTH_SHORT).show();
-        } else {
-            while (cursor.moveToNext()) {
-                    listClasificacion.add(cursor.getString(0));
-                    listClasificacion.add(cursor.getString(1));
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
-            adapterClasificacion = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listClasificacion);
-            listViewClasificacion.setAdapter(adapterClasificacion);
-        }
-    }
-     */
+        });
 
-    public void spinnerClasificacion() {
+        agregar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!nombre.getText().toString().isEmpty()){
+                    if(!descripcion.getText().toString().isEmpty()){
+                        if(!video.getText().toString().isEmpty()){
+                            if(spinnerClasificacion.getSelectedItemPosition()!=0){
+                                if(ImagenSeleccionada==true){
+                                    if(getIntent().getExtras().get("nombre").equals("")){
+                                        BitmapDrawable drawable = (BitmapDrawable) imgView.getDrawable();
+                                        Bitmap b = drawable.getBitmap();
+                                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                                        b.compress(Bitmap.CompressFormat.PNG, 80, bos);
 
-        /*Cursor cursor = db.ver_clasificacion();
-        listEjercicios.add("Seleccione tipo de ejercicio");
-        if (cursor.getCount() == 0) {
-            Toast.makeText(this, "No hay ejercicios", Toast.LENGTH_SHORT).show();
-        } else {
-            while (cursor.moveToNext()) {
-                listEjercicios.add(cursor.getString(1));
-            }
+                                        Map<String, Object> data = new HashMap<>();
+                                        data.put("nombre", nombre.getText().toString());
+                                        data.put("descripcion", descripcion.getText().toString());
+                                        data.put("NombreClasificacion", spinnerClasificacion.getSelectedItem().toString());
+                                        data.put("video", video.getText().toString());
+                                        data.put("url", "");
 
-            adapterEjercicios = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listEjercicios){
-                @Override
-                public boolean isEnabled(int position){
-                    if (position == 0) {
-                        return false;
-                    } else {
-                        return true;
+                                        nuevoEjercicio = bdd.collection("preparador").document(correo)
+                                                .collection("clasificacion").document(spinnerClasificacion.getSelectedItem().toString())
+                                                .collection("ejercicios").document(nombre.getText().toString());
+                                        nuevoEjercicio.set(data);
+                                        nuevoEjercicio.update("url", downloadUri.toString());
+                                        finish();
+                                        nombre.setText("");
+                                        descripcion.setText("");
+                                        video.setText("");
+                                        imgView.setImageResource(android.R.color.transparent);
+                                        Toast.makeText(AgregarEjerciciosActivity.this, "Ejercicio agregado", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        String nombre_ejercicio = (String) getIntent().getExtras().get("nombre");
+                                        Map<String, Object> data = new HashMap<>();
+                                        data.put("nombre", nombre.getText().toString());
+                                        data.put("descripcion", descripcion.getText().toString());
+                                        data.put("NombreClasificacion", spinnerClasificacion.getSelectedItem().toString());
+                                        data.put("video", video.getText().toString());
+                                        data.put("url", "");
+
+                                        nuevoEjercicio = bdd.collection("preparador").document(correo)
+                                                .collection("clasificacion").document(spinnerClasificacion.getSelectedItem().toString())
+                                                .collection("ejercicios").document(nombre.getText().toString());
+                                        nuevoEjercicio.set(data, SetOptions.merge());
+                                        if(imagencambiada==true){
+                                            nuevoEjercicio.update("url", downloadUri.toString());
+                                        }else{
+                                            nuevoEjercicio.update("url", url);
+                                        }
+                                        if(!nombre_ejercicio.equals(nombre.getText().toString())){
+                                            borrarAnterior(nombre_ejercicio, correo, nombre.getText().toString(), spinnerClasificacion.getSelectedItem().toString());
+                                        }
+                                        finish();
+                                        nombre.setText("");
+                                        descripcion.setText("");
+                                        video.setText("");
+                                        imgView.setImageResource(android.R.color.transparent);
+                                        Toast.makeText(AgregarEjerciciosActivity.this, "Ejercicio agregado", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }else{
+                                    Toast.makeText(AgregarEjerciciosActivity.this, "Debe seleccionar una imagen", Toast.LENGTH_SHORT).show();
+                                }
+                            }else{
+                                Toast.makeText(AgregarEjerciciosActivity.this, "Debe seleccionar una clasificación", Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            video.setError("El campo no puede estar vacío");
+                        }
+                    }else{
+                        descripcion.setError("El campo no puede estar vacío");
                     }
+                }else{
+                    nombre.setError("El campo no puede estar vacío");
                 }
-            };
-            spinnerClasificacion.setAdapter(adapterEjercicios);
+            }
+        });
+    }
 
-        }*/
-        bdd.collection("clasificacion")
+    private void borrarAnterior(String nombre_ejercicio, String correo, String nombreNuevo, String clasificacion) {
+        bdd.collection("preparador").document(correo)
+                .collection("clasificacion").document(clasificacion)
+                    .collection("ejercicios").document(nombre_ejercicio)
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.e("documento", "eliminado");
+                            }
+                        });
+    }
+
+    private void buscarEjercicio(String nombre_ejercicio, String correo) {
+        bdd.collection("preparador").document(correo).collection("clasificacion")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                           @Override
+                                           public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                               if (task.isSuccessful()){
+                                                   for (QueryDocumentSnapshot documentSnapshots: task.getResult()) {
+                                                       bdd.collection("preparador").document(correo).collection("clasificacion").document(documentSnapshots.getString("nombre")).collection("ejercicios")
+                                                               .whereEqualTo("nombre", nombre_ejercicio)
+                                                               .get()
+                                                               .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                                          @Override
+                                                                                          public void onComplete(@NonNull Task<QuerySnapshot> task1) {
+                                                                                              if (task1.isSuccessful()){
+                                                                                                  for (QueryDocumentSnapshot documentSnapshots1: task1.getResult()) {
+                                                                                                      nombre.setText(documentSnapshots1.getString("nombre"));
+                                                                                                      descripcion.setText(documentSnapshots1.getString("descripcion"));
+                                                                                                      video.setText(documentSnapshots1.getString("video"));
+                                                                                                      nombre.setText(documentSnapshots1.getString("nombre"));
+                                                                                                      Picasso.get().load(documentSnapshots1.getString("url")).into(imgView);
+                                                                                                      url=documentSnapshots1.getString("url");
+                                                                                                      ImagenSeleccionada=true;
+                                                                                                  }
+                                                                                              }
+                                                                                          }
+                                                                                      }
+
+                                                               );
+                                                   }
+
+                                               }
+                                           }
+                                       }
+
+                );
+    }
+
+    public void spinnerClasificacion(String correo) {
+        bdd.collection("preparador").document(correo).collection("clasificacion")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                            @Override
@@ -210,17 +292,17 @@ public class AgregarEjerciciosActivity extends AppCompatActivity {
                                                }
                                            }
                                        }
-
                 );
     }
 
-    //Devolver la imagen para mostrarla en el Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            SharedPreferences prefs = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+            String correo = prefs.getString("correo", null);
             selectedImage = data.getData();
-            guardarImagen(selectedImage);
+            guardarImagen(selectedImage, correo);
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
             Cursor cursor = getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
@@ -230,12 +312,14 @@ public class AgregarEjerciciosActivity extends AppCompatActivity {
             cursor.close();
             ImageView imageView = (ImageView) findViewById(R.id.img_agregarEjercicios_imagen);
             imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            ImagenSeleccionada=true;
+            imagencambiada=true;
 
         }
     }
 
-    private void guardarImagen(Uri selectedImage) {
-        StorageReference FilePath = storageReference.child("fotos ejercicios").child(selectedImage.getLastPathSegment());
+    private void guardarImagen(Uri selectedImage, String correo) {
+        StorageReference FilePath = storageReference.child(correo).child("fotos ejercicios").child(selectedImage.getLastPathSegment());
         FilePath.putFile(selectedImage).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -249,19 +333,42 @@ public class AgregarEjerciciosActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
-                    //Obtenemos la url descarga
                     downloadUri = task.getResult();
-                    //Log.e(TAG, "onComplete: Success " );
-                    //La ponemos en el database
-
                     data1.put("url", downloadUri.toString());
-                    //bdd.collection("ejercicios").document(nombre.getText().toString()).set(data, SetOptions.merge());
-
                 } else {
                     Toast.makeText(AgregarEjerciciosActivity.this, "upload failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    //Log.e(TAG, task.getException().getMessage());
                 }
             }
         });
+    }
+
+    private AlertDialog confirmar() {
+        String nombre_ejercicio = (String) getIntent().getExtras().get("nombre");
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
+                // set message, title, and icon
+                .setTitle("Seleccionar nueva imagen")
+                .setMessage("La imagen anterior se borrará permanentemente")
+                .setIcon(R.drawable.ic_baseline_delete_forever_24)
+
+                .setPositiveButton("Cambiar foto", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Intent i = new Intent(
+                                Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(i, RESULT_LOAD_IMAGE);
+                    }
+
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+
+        return myQuittingDialogBox;
     }
 }

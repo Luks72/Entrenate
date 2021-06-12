@@ -1,12 +1,15 @@
 package cl.ubb.entrenate;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -20,6 +23,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.io.Serializable;
@@ -35,6 +44,8 @@ public class       DetalleEjercicio extends AppCompatActivity implements Seriali
     //EditText nombreEjercicio, nombreClasificacion;
     private AdminSQLiteAdminHelper db;
     private Button btn_eliminar, btn_video, btn_editar;
+    FirebaseFirestore bdd;
+    String nombre_ejercicio;
 
 
     @Override
@@ -48,44 +59,41 @@ public class       DetalleEjercicio extends AppCompatActivity implements Seriali
         img_foto= findViewById(R.id.img_detalleEjercicio);
         txt_descripcion = findViewById(R.id.txt_detalleEjercicio_descripcion);
         txtx_clasificacion = findViewById(R.id.txt_detalleEjercicio_clasificacion);
-        //btn_eliminar = findViewById(R.id.btn_detalleEjercicio_eliminar);
+        btn_eliminar = findViewById(R.id.btn_detalleEjercicio_eliminar);
         btn_video = findViewById(R.id.btn_detalleEjercicio_video);
-        //btn_editar = findViewById(R.id.btn_detalleEjercicio_editar);
-        //AlertDialog alert = confirmar();
+        btn_editar = findViewById(R.id.btn_detalleEjercicio_editar);
+        bdd= FirebaseFirestore.getInstance();
+        AlertDialog alert = confirmar();
 
 
-        String nombre_ejercicio = (String) getIntent().getExtras().get("nombre");
+        nombre_ejercicio = (String) getIntent().getExtras().get("nombre");
         String video_ejercicio = (String) getIntent().getExtras().get("video");
         String descripcion_ejercicio = (String) getIntent().getExtras().get("descripcion");
         txt_descripcion.setText((String) getIntent().getExtras().get("descripcion"));
         String url_ejercicio = (String) getIntent().getExtras().get("url");
         Picasso.get().load(url_ejercicio).into(img_foto);
         setTitle(nombre_ejercicio);
-        //byte[] imagen_ejercicio = (byte[]) getIntent().getExtras().get("imagen");
-        //int id_clas=(int) getIntent().getIntExtra("idClas",0);
-        //txtx_clasificacion.setText(String.valueOf(id_clas));
-        //consultaClasificación(id_clas);
 
-
-        /*btn_eliminar.setOnClickListener(new View.OnClickListener() {
+        btn_eliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alert.show();
             }
-        });*/
+        });
         btn_video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(video_ejercicio)));
             }
         });
-        /*btn_editar.setOnClickListener(new View.OnClickListener() {
+        btn_editar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                String nombre = nombre_ejercicio;
+                startActivity(new Intent(DetalleEjercicio.this, AgregarEjerciciosActivity.class)
+                        .putExtra("nombre", nombre));
             }
-        });*/
-
+        });
 
         //rellenarDetalle();
 
@@ -95,22 +103,19 @@ public class       DetalleEjercicio extends AppCompatActivity implements Seriali
         String descripcion_ejercicio = (String) getIntent().getExtras().get("descripcion");
         //Log.e(TAG, descripcion_ejercicio);
 
-
-
     }
 
-    /*private AlertDialog confirmar() {
-        int id_ejercicio = (int) getIntent().getExtras().get("id");
+    private AlertDialog confirmar() {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
                 // set message, title, and icon
                 .setTitle("Eliminar ejercicio")
-                .setMessage("¿Quieres eliminar este ejercicio?")
+                .setMessage("El ejercicio se eliminará permanentemente")
                 .setIcon(R.drawable.ic_baseline_delete_forever_24)
 
                 .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        db.eliminar_ejercicio(id_ejercicio);
+                        eliminarEjercicio();
                         Toast.makeText(DetalleEjercicio.this, "Eliminado", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                         finish();
@@ -127,20 +132,32 @@ public class       DetalleEjercicio extends AppCompatActivity implements Seriali
                 .create();
 
         return myQuittingDialogBox;
-    }*/
+    }
 
-   /* public void consultaClasificación(int idEjercicio){
-        Cursor cursor = db.buscar_clasificacion(idEjercicio);
-        while (cursor.moveToNext()){
-            String nombreClasificacion = cursor.getString(1);
-            txtx_clasificacion.setText(nombreClasificacion);
-        }
-
-
-
-    }*/
-
-
-
-
+    private void eliminarEjercicio() {
+        SharedPreferences prefs = getSharedPreferences("credenciales", Context.MODE_PRIVATE);
+        String correo = prefs.getString("correo", null);
+        bdd.collection("preparador").document(correo).collection("clasificacion")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                           @Override
+                                           public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                               if (task.isSuccessful()){
+                                                   for (QueryDocumentSnapshot documentSnapshots: task.getResult()) {
+                                                       bdd.collection("preparador").document(correo)
+                                                               .collection("clasificacion").document(documentSnapshots.getString("nombre"))
+                                                                    .collection("ejercicios").document(nombre_ejercicio)
+                                                                       .delete()
+                                                                       .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                           @Override
+                                                                           public void onSuccess(Void aVoid) {
+                                                                               Log.e("documento", "eliminado");
+                                                                           }
+                                                                       });
+                                                   }
+                                               }
+                                           }
+                                       }
+                );
+    }
 }
